@@ -18,8 +18,72 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap"/>
   <link href="images/anunay_favicon.svg" rel="shortcut icon" type="image/x-icon"/>
   <link href="images/anunay_favicon.svg" rel="apple-touch-icon"/>
+  <script>
+    (function() {
+      const savedTheme = localStorage.getItem('portfolio_theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+      document.addEventListener('DOMContentLoaded', () => {
+        document.body.setAttribute('data-theme', savedTheme);
+      });
+    })();
+  </script>
 </head>
 <body>
+
+  <!-- ==========================================
+       CYBERPUNK INTERACTIVE EVASIVE INTRO OVERLAY
+       ========================================== -->
+  <div id="cyber-intro-overlay" role="dialog" aria-modal="true" aria-label="Security Clearance Terminal">
+    <div class="cyber-shutter cyber-shutter-top"></div>
+    <div class="cyber-shutter cyber-shutter-bottom"></div>
+    
+    <div class="cyber-bg-glow"></div>
+    <div class="cyber-grid-lines"></div>
+    <div class="cyber-scanlines"></div>
+    <div class="cyber-laser-sweep"></div>
+    
+    <div class="cyber-console-gate">
+      <div class="corner-bracket bracket-tl"></div>
+      <div class="corner-bracket bracket-tr"></div>
+      <div class="corner-bracket bracket-bl"></div>
+      <div class="corner-bracket bracket-br"></div>
+      
+      <div class="cyber-gate-header">
+        <div class="cyber-telemetry-badge">
+          <span class="status-dot-pulse"></span>
+          <span>KERNEL: ANUNAY_DEV_OS v4.18</span>
+        </div>
+        <div class="cyber-telemetry-meta">
+          <span>PORT: 443 [KOCHI_IN]</span>
+        </div>
+      </div>
+      
+      <h2 class="cyber-gate-title">SECURITY <span>CLEARANCE</span> GATE</h2>
+      
+      <div class="cyber-log-stream" id="cyber-log-stream">
+        <p class="cyber-log-line">> CORE SYSTEM MOUNTED: /dev/anunay/portfolio... [OK]</p>
+        <p class="cyber-log-line accent" id="cyber-dynamic-log">> FIREWALL ACTIVE: INITIALIZE CHALLENGE HANDSHAKE...</p>
+      </div>
+      
+      <div class="evasive-arena" id="evasive-arena">
+        <div class="arena-crosshairs"></div>
+        <button id="evasive-btn" class="evasive-btn" type="button" aria-live="polite">
+          <span class="btn-icon-wrapper">
+            <span id="btn-icon">🔒</span>
+            <span id="btn-text">INITIALIZE ACCESS</span>
+          </span>
+        </button>
+      </div>
+      
+      <div class="evasive-hint" id="evasive-hint">
+        [HOVER / TAP BUTTON TO INITIATE CLEARANCE OVERRIDE]
+      </div>
+      
+      <div>
+        <button id="bypass-intro-btn" class="bypass-intro-btn" type="button">[ BYPASS SECURITY PROTOCOL ]</button>
+      </div>
+    </div>
+  </div>
 
   <!-- Navigation -->
   <div role="banner" class="navigation w-nav">
@@ -27,7 +91,8 @@
       <div class="container-navigation">
         <div class="navigation-left">
           <a href="index.html" aria-current="page" class="brand w-nav-brand w--current">
-            <img src="images/anunay_logo.svg" loading="eager" alt="Anunay Brini Logo"/>
+            <img src="images/anunay_logo.svg" loading="eager" alt="Anunay Brini Logo" class="logo-light"/>
+            <img src="images/anunay_logo_dark.svg" loading="eager" alt="Anunay Brini Logo" class="logo-dark"/>
           </a>
         </div>
         <nav role="navigation" class="menu-wrap w-nav-menu">
@@ -48,6 +113,19 @@
           </a>
         </nav>
         <div class="navigation-right">
+          <!-- Dark / Light Theme Toggle Switch -->
+          <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle Theme" title="Switch Theme (Dark / Light)">
+            <span class="theme-icon-light">☀️</span>
+            <span class="theme-icon-dark">🌙</span>
+            <span class="theme-toggle-text">Dark</span>
+          </button>
+          
+          <!-- Replay Cyber Intro Button -->
+          <button id="replay-intro-btn" class="replay-intro-btn" aria-label="Replay Cyber Terminal Intro" title="Replay Cyber Terminal Intro">
+            <span class="replay-icon">⚡</span>
+            <span class="replay-text">Intro</span>
+          </button>
+
           <div class="menu-button w-nav-button" id="menu-toggle" aria-label="Toggle Navigation">
             <span class="hamburger-bar"></span>
             <span class="hamburger-bar"></span>

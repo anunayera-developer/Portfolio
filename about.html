@@ -18,6 +18,15 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap"/>
   <link href="images/anunay_favicon.svg" rel="shortcut icon" type="image/x-icon"/>
   <link href="images/anunay_favicon.svg" rel="apple-touch-icon"/>
+  <script>
+    (function() {
+      const savedTheme = localStorage.getItem('portfolio_theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+      document.addEventListener('DOMContentLoaded', () => {
+        document.body.setAttribute('data-theme', savedTheme);
+      });
+    })();
+  </script>
 </head>
 <body>
 
@@ -27,7 +36,8 @@
       <div class="container-navigation">
         <div class="navigation-left">
           <a href="index.html" class="brand w-nav-brand">
-            <img src="images/anunay_logo.svg" loading="eager" alt="Anunay Brini Logo"/>
+            <img src="images/anunay_logo.svg" loading="eager" alt="Anunay Brini Logo" class="logo-light"/>
+            <img src="images/anunay_logo_dark.svg" loading="eager" alt="Anunay Brini Logo" class="logo-dark"/>
           </a>
         </div>
         <nav role="navigation" class="menu-wrap w-nav-menu">
@@ -48,6 +58,18 @@
           </a>
         </nav>
         <div class="navigation-right">
+          <!-- Dark / Light Theme Toggle Switch -->
+          <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle Theme" title="Switch Theme (Dark / Light)">
+            <span class="theme-icon-light">☀️</span>
+            <span class="theme-icon-dark">🌙</span>
+            <span class="theme-toggle-text">Dark</span>
+          </button>
+          
+          <a href="index.html?intro=replay" class="replay-intro-btn" title="View Cyber Terminal Intro">
+            <span class="replay-icon">⚡</span>
+            <span class="replay-text">Intro</span>
+          </a>
+
           <div class="menu-button w-nav-button" id="menu-toggle" aria-label="Toggle Navigation">
             <span class="hamburger-bar"></span>
             <span class="hamburger-bar"></span>
@@ -63,7 +85,7 @@
   <div class="section-header">
     <div class="container">
       <div class="heading-wrapper">
-        <h1 class="h1-heading">3rd Year B.Sc. (Hons.) CS Student &amp; Full Stack Developer</h1>
+        <h1 class="h1-heading">B.Sc. (Hons.) CS Student &amp; Full Stack Developer</h1>
         <div class="project-detail">
           <h5>FULL STACK</h5>
           <span class="bullet-dot">•</span>
@@ -83,7 +105,7 @@
         <div class="intro-column">
           <h3 class="intro-headline">Professional Introduction</h3>
           <p class="paragraph-large">
-            I am a 3rd-year B.Sc. Computer Science (Honours) student at Rajagiri College of Social Sciences (Autonomous), pursuing my 4-year Honours degree (2024–2028). I actively build as a Full Stack Developer, UI/UX Designer, and Graphic Designer.
+            I am a B.Sc. Computer Science (Honours) student at Rajagiri College of Social Sciences (Autonomous), pursuing my 4-year Honours degree (2024–2028). I actively build as a Full Stack Developer, UI/UX Designer, and Graphic Designer.
           </p>
           <p class="paragraph-large">
             My industry journey began at <strong>ERA</strong>, an innovative startup incubated inside our college campus, where I worked as a <strong>UI/UX Designer</strong> creating user experiences, interfaces, and module layouts for platforms like Mentur.
@@ -108,7 +130,7 @@
             </div>
             <div class="spec-row">
               <span class="spec-label">Current Standing</span>
-              <span class="spec-val">3rd Year Student</span>
+              <span class="spec-val">Honours Undergraduate</span>
             </div>
             <div class="spec-row">
               <span class="spec-label">Honours Duration</span>
@@ -144,8 +166,8 @@
           <div class="heading-normal">Graduation Year (Hons.)</div>
         </div>
         <div class="number-cell">
-          <div class="number-large">3rd</div>
-          <div class="heading-normal">Year B.Sc. (Hons.)</div>
+          <div class="number-large">4 Yr</div>
+          <div class="heading-normal">B.Sc. (Hons.) Degree</div>
         </div>
       </div>
     </div>
@@ -207,7 +229,7 @@
             <div class="number-block"><p class="paragraph-large">04</p></div>
             <div class="card-content-text">
               <h5 class="award-heading">B.Sc. (Hons.) Computer Science Foundation</h5>
-              <p class="paragraph-large">Pursuing 4-year Honours Degree (2024–2028), currently in 3rd Year at Rajagiri College of Social Sciences. Deepening theoretical fundamentals in data structures, algorithms, databases, and software engineering.</p>
+              <p class="paragraph-large">Pursuing 4-year Honours Degree (2024–2028), at Rajagiri College of Social Sciences. Deepening theoretical fundamentals in data structures, algorithms, databases, and software engineering.</p>
             </div>
           </div>
           <div class="date-detail-wrapper">
