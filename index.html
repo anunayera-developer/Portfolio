@@ -18,70 +18,25 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap"/>
   <link href="images/anunay_favicon.svg" rel="shortcut icon" type="image/x-icon"/>
   <link href="images/anunay_favicon.svg" rel="apple-touch-icon"/>
-  <script>
-    (function() {
-      const savedTheme = localStorage.getItem('portfolio_theme') || 'dark';
-      document.documentElement.setAttribute('data-theme', savedTheme);
-      document.addEventListener('DOMContentLoaded', () => {
-        document.body.setAttribute('data-theme', savedTheme);
-      });
-    })();
-  </script>
 </head>
 <body>
 
-  <!-- ==========================================
-       CYBERPUNK INTERACTIVE EVASIVE INTRO OVERLAY
-       ========================================== -->
-  <div id="cyber-intro-overlay" role="dialog" aria-modal="true" aria-label="Security Clearance Terminal">
-    <div class="cyber-shutter cyber-shutter-top"></div>
-    <div class="cyber-shutter cyber-shutter-bottom"></div>
-    
-    <div class="cyber-bg-glow"></div>
-    <div class="cyber-grid-lines"></div>
-    <div class="cyber-scanlines"></div>
-    <div class="cyber-laser-sweep"></div>
-    
-    <div class="cyber-console-gate">
-      <div class="corner-bracket bracket-tl"></div>
-      <div class="corner-bracket bracket-tr"></div>
-      <div class="corner-bracket bracket-bl"></div>
-      <div class="corner-bracket bracket-br"></div>
-      
-      <div class="cyber-gate-header">
-        <div class="cyber-telemetry-badge">
-          <span class="status-dot-pulse"></span>
-          <span>KERNEL: ANUNAY_DEV_OS v4.18</span>
-        </div>
-        <div class="cyber-telemetry-meta">
-          <span>PORT: 443 [KOCHI_IN]</span>
-        </div>
-      </div>
-      
-      <h2 class="cyber-gate-title">SECURITY <span>CLEARANCE</span> GATE</h2>
-      
-      <div class="cyber-log-stream" id="cyber-log-stream">
-        <p class="cyber-log-line">> CORE SYSTEM MOUNTED: /dev/anunay/portfolio... [OK]</p>
-        <p class="cyber-log-line accent" id="cyber-dynamic-log">> FIREWALL ACTIVE: INITIALIZE CHALLENGE HANDSHAKE...</p>
-      </div>
-      
-      <div class="evasive-arena" id="evasive-arena">
-        <div class="arena-crosshairs"></div>
-        <button id="evasive-btn" class="evasive-btn" type="button" aria-live="polite">
-          <span class="btn-icon-wrapper">
-            <span id="btn-icon">🔒</span>
-            <span id="btn-text">INITIALIZE ACCESS</span>
-          </span>
-        </button>
-      </div>
-      
-      <div class="evasive-hint" id="evasive-hint">
-        [HOVER / TAP BUTTON TO INITIATE CLEARANCE OVERRIDE]
-      </div>
-      
-      <div>
-        <button id="bypass-intro-btn" class="bypass-intro-btn" type="button">[ BYPASS SECURITY PROTOCOL ]</button>
-      </div>
+  <!-- Optical Illusion Page Transition Overlay -->
+  <div id="page-illusion-overlay" class="page-illusion-overlay is-entering" aria-hidden="true">
+    <div class="illusion-blades">
+      <div class="illusion-blade"></div>
+      <div class="illusion-blade"></div>
+      <div class="illusion-blade"></div>
+      <div class="illusion-blade"></div>
+      <div class="illusion-blade"></div>
+      <div class="illusion-blade"></div>
+      <div class="illusion-blade"></div>
+      <div class="illusion-blade"></div>
+    </div>
+    <div class="illusion-vortex">
+      <div class="vortex-ring ring-1"></div>
+      <div class="vortex-ring ring-2"></div>
+      <div class="vortex-ring ring-3"></div>
     </div>
   </div>
 
@@ -91,8 +46,7 @@
       <div class="container-navigation">
         <div class="navigation-left">
           <a href="index.html" aria-current="page" class="brand w-nav-brand w--current">
-            <img src="images/anunay_logo.svg" loading="eager" alt="Anunay Brini Logo" class="logo-light"/>
-            <img src="images/anunay_logo_dark.svg" loading="eager" alt="Anunay Brini Logo" class="logo-dark"/>
+            <img src="images/anunay_logo.svg" loading="eager" alt="Anunay Brini Logo"/>
           </a>
         </div>
         <nav role="navigation" class="menu-wrap w-nav-menu">
@@ -113,19 +67,6 @@
           </a>
         </nav>
         <div class="navigation-right">
-          <!-- Dark / Light Theme Toggle Switch -->
-          <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle Theme" title="Switch Theme (Dark / Light)">
-            <span class="theme-icon-light">☀️</span>
-            <span class="theme-icon-dark">🌙</span>
-            <span class="theme-toggle-text">Dark</span>
-          </button>
-          
-          <!-- Replay Cyber Intro Button -->
-          <button id="replay-intro-btn" class="replay-intro-btn" aria-label="Replay Cyber Terminal Intro" title="Replay Cyber Terminal Intro">
-            <span class="replay-icon">⚡</span>
-            <span class="replay-text">Intro</span>
-          </button>
-
           <div class="menu-button w-nav-button" id="menu-toggle" aria-label="Toggle Navigation">
             <span class="hamburger-bar"></span>
             <span class="hamburger-bar"></span>
@@ -549,6 +490,28 @@
     </div>
   </div>
 
+  <!-- Achievements Section -->
+  <div class="section-regular" id="Achievements">
+    <div class="container">
+      <div class="heading-wrapper">
+        <h2>Achievements &amp; Milestones</h2>
+        <h6 class="heading-medium margin-top-8">RECOGNITION, CONTRIBUTIONS &amp; HIGHLIGHTS</h6>
+      </div>
+      <div class="achievements-grid" id="achievements-grid">
+        <div class="achievement-card">
+          <div class="achievement-meta"><span>ERA &amp; Developer Lab</span><span>2025</span></div>
+          <h4>Mentur AI &amp; Module Integration Lead</h4>
+          <p>Architected and integrated RAG-powered AI assistant modules using FastAPI, Ollama, and ChromaDB into the Mentur student networking platform.</p>
+        </div>
+        <div class="achievement-card">
+          <div class="achievement-meta"><span>Developer Lab</span><span>2024 – Present</span></div>
+          <h4>UI/UX &amp; Brand Systems Contributor</h4>
+          <p>Transitioned from ERA's campus startup design team to leading visual identity, graphic design, and full-stack product delivery at standalone Developer Lab.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Technical Interests Section -->
   <div class="section-large" id="Interests">
     <div class="container">
@@ -611,71 +574,21 @@
     </div>
   </div>
 
-  <!-- Contact Info Grid -->
-  <div class="section-large">
-    <div class="container-large">
-      <div class="w-layout-grid grid-contact">
-        <div class="contact-block">
-          <div class="number-block-circle">
-            <img src="images/62679078533d16192d4c7b81_Icon_Message.svg" loading="lazy" alt="Email Icon"/>
-          </div>
-          <div>
-            <h6 class="heading-title">Education</h6>
-            <p class="paragraph-regular">B.Sc. (Hons.) Computer Science (2024–2028)</p>
-          </div>
-        </div>
-        <div class="contact-block">
-          <div class="number-block-circle">
-            <img src="images/62679078533d1680364c7b83_Icon_Call.svg" loading="lazy" alt="College Icon"/>
-          </div>
-          <div>
-            <h6 class="heading-title">College</h6>
-            <p class="paragraph-regular">Rajagiri College of Social Sciences</p>
-          </div>
-        </div>
-        <div class="contact-block">
-          <div class="number-block-circle">
-            <img src="images/62679078533d16416a4c7b82_Icon_Map.svg" loading="lazy" alt="Location Icon"/>
-          </div>
-          <div>
-            <h6 class="heading-title">Location</h6>
-            <p class="paragraph-regular">Kochi, Kerala, India</p>
-          </div>
-        </div>
+    <!-- Simple Footer -->
+  <footer class="section-footer simple-footer">
+    <div class="simple-footer-inner">
+      <div class="simple-footer-brand">ANUNAY<span class="red-dot">.</span> BRINI</div>
+      <div class="simple-footer-links">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="#Projects">Projects</a>
+        <a href="#Achievements">Achievements</a>
+        <a href="#Contact">Contact</a>
+        <a href="admin.html">Manage</a>
       </div>
+      <div class="simple-footer-copy">&copy; 2026 Anunay Brini</div>
     </div>
-  </div>
-
-  <!-- Footer -->
-  <div class="section-footer">
-    <div class="container-footer">
-      <div class="footer-bottom">
-        <div class="w-layout-grid grid-footer">
-          <div class="footer-wrapper">
-            <a href="index.html" aria-current="page" class="w-inline-block w--current">
-              <img src="images/anunay_logo_white.svg" loading="lazy" alt="Anunay Brini"/>
-            </a>
-            <div class="footer-link-wrapper">
-              <a href="index.html" class="footer-link w-inline-block"><div class="text-block-3"><div>Home</div></div></a>
-              <a href="about.html" class="footer-link w-inline-block"><div class="text-block-3"><div>About</div></div></a>
-              <a href="#Projects" class="footer-link w-inline-block"><div class="text-block-3"><div>Projects</div></div></a>
-              <a href="#Contact" class="footer-link w-inline-block"><div class="text-block-3"><div>Contact</div></div></a>
-            </div>
-          </div>
-          <div class="footer-wrapper">
-            <p class="body-small-normal title-gray-100">© 2026 Anunay Brini. All rights reserved.</p>
-            <div class="w-layout-grid grid-footer-social">
-              <a href="https://github.com/anunayera-developer" target="_blank" rel="noopener noreferrer" class="social-link w-inline-block" title="GitHub">
-                <img src="images/62673e4070051a6f350ad8e8_Icon_Twitter.svg" loading="lazy" alt="GitHub"/>
-              </a>
-              <a href="https://linkedin.com/in/anunaybrini" target="_blank" rel="noopener noreferrer" class="social-link w-inline-block" title="LinkedIn">
-                <img src="images/62673e4070051a4ae40ad8e9_Icon_LinkedIn.svg" loading="lazy" alt="LinkedIn"/>
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+  </footer>
   </div>
 
   <script src="js/jquery-3.5.1.min.dc5e7f18c8.js" type="text/javascript"></script>

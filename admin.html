@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <title>Portfolio Studio | Anunay Brini</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous"/>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@400;500;600;700&display=swap"/>
+  <link href="css/style.css" rel="stylesheet" type="text/css"/>
+  <link href="css/admin.css" rel="stylesheet" type="text/css"/>
+  <link href="images/anunay_favicon.svg" rel="shortcut icon" type="image/x-icon"/>
+</head>
+<body class="admin-body">
+
+  <!-- Optical Illusion Page Transition Overlay -->
+  <div id="page-illusion-overlay" class="page-illusion-overlay is-entering" aria-hidden="true">
+    <div class="illusion-blades">
+      <div class="illusion-blade"></div>
+      <div class="illusion-blade"></div>
+      <div class="illusion-blade"></div>
+      <div class="illusion-blade"></div>
+      <div class="illusion-blade"></div>
+      <div class="illusion-blade"></div>
+      <div class="illusion-blade"></div>
+      <div class="illusion-blade"></div>
+    </div>
+    <div class="illusion-vortex">
+      <div class="vortex-ring ring-1"></div>
+      <div class="vortex-ring ring-2"></div>
+      <div class="vortex-ring ring-3"></div>
+    </div>
+  </div>
+
+  <header class="admin-topbar">
+    <div class="admin-topbar-inner">
+      <a href="index.html" class="admin-brand" data-illusion-link>
+        <img src="images/anunay_logo.svg" alt="Anunay Brini"/>
+        <span class="admin-badge">STUDIO CMS</span>
+      </a>
+      <div class="admin-topbar-actions">
+        <a href="index.html" class="admin-btn-outline" data-illusion-link>View Portfolio</a>
+        <button id="logout-btn" class="admin-btn-dark" style="display:none;" type="button">Log Out</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="admin-main">
+    <!-- Owner Login Gate -->
+    <section id="login-view" class="login-card">
+      <div class="login-header">
+        <span class="admin-eyebrow">OWNER ACCESS ONLY</span>
+        <h1>Portfolio Management</h1>
+        <p id="auth-mode-desc">Sign in with your configured owner credentials.</p>
+      </div>
+
+      <form id="login-form" class="admin-form">
+        <div id="field-email-wrap" class="form-group">
+          <label for="login-email">Owner Email</label>
+          <input type="email" id="login-email" placeholder="Enter your email"/>
+        </div>
+
+        <div id="field-phone-wrap" class="form-group" style="display:none;">
+          <label for="login-phone">Owner Phone Number</label>
+          <div class="input-with-btn">
+            <input type="tel" id="login-phone" placeholder="+91..."/>
+            <button type="button" id="send-otp-btn" class="admin-btn-outline">Send OTP</button>
+          </div>
+        </div>
+
+        <div id="field-otp-wrap" class="form-group" style="display:none;">
+          <label for="login-otp">6-Digit OTP</label>
+          <input type="text" id="login-otp" maxlength="6" placeholder="Enter 6-digit OTP"/>
+        </div>
+
+        <div id="field-password-wrap" class="form-group">
+          <label for="login-password">Password</label>
+          <input type="password" id="login-password" placeholder="Enter your password"/>
+        </div>
+
+        <div id="login-notice" class="admin-notice" style="display:none;"></div>
+        <div id="login-error" class="admin-error" style="display:none;"></div>
+
+        <button type="submit" class="admin-btn-red admin-btn-full">Sign In</button>
+      </form>
+    </section>
+
+    <!-- Authenticated Studio Workspace -->
+    <section id="dashboard-view" class="dashboard-wrap" style="display:none;">
+      <div class="dashboard-header">
+        <div>
+          <span class="admin-eyebrow">NO-CODE PORTFOLIO EDITOR</span>
+          <h1>Manage Your Portfolio</h1>
+        </div>
+        <div class="dashboard-header-actions">
+          <button id="export-json-btn" class="admin-btn-outline" type="button">Export portfolio.json</button>
+        </div>
+      </div>
+
+      <div id="toast-bar" class="toast-bar" style="display:none;"></div>
+
+      <nav class="admin-tabs" role="tablist">
+        <button class="admin-tab active" data-tab="projects" type="button">Projects</button>
+        <button class="admin-tab" data-tab="journey" type="button">Roles &amp; Journey</button>
+        <button class="admin-tab" data-tab="achievements" type="button">Achievements</button>
+        <button class="admin-tab" data-tab="profile" type="button">Profile &amp; Details</button>
+        <button class="admin-tab" data-tab="interests" type="button">Technical Interests</button>
+        <button class="admin-tab" data-tab="messages" type="button">Messages</button>
+        <button class="admin-tab" data-tab="security" type="button">Login &amp; Security</button>
+      </nav>
+
+      <!-- TAB: PROJECTS -->
+      <div id="tab-projects" class="tab-panel active">
+        <div class="panel-grid">
+          <div class="panel-card">
+            <h2 id="project-form-title">Add New Project</h2>
+            <form id="project-form" class="admin-form">
+              <input type="hidden" id="proj-id"/>
+              <div class="form-group">
+                <label for="proj-title">Project Title</label>
+                <input type="text" id="proj-title" required placeholder="e.g. Lift Haus Gym"/>
+              </div>
+              <div class="form-group">
+                <label for="proj-category">Category Badge</label>
+                <input type="text" id="proj-category" required placeholder="e.g. Full Stack Development | AI"/>
+              </div>
+              <div class="form-group">
+                <label for="proj-desc">Description</label>
+                <textarea id="proj-desc" rows="3" required placeholder="Describe the project..."></textarea>
+              </div>
+              <div class="form-row-2">
+                <div class="form-group">
+                  <label for="proj-focus-title">Tags Heading</label>
+                  <input type="text" id="proj-focus-title" value="Focus Areas:" placeholder="Focus Areas:"/>
+                </div>
+                <div class="form-group">
+                  <label for="proj-repo">GitHub / Live URL</label>
+                  <input type="url" id="proj-repo" placeholder="https://github.com/..."/>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="proj-tags">Focus Tags (comma-separated)</label>
+                <input type="text" id="proj-tags" placeholder="UI/UX Design, REST API, Role-Based Access"/>
+              </div>
+              <div class="form-group">
+                <label for="proj-stack">Tech Stack Line (optional)</label>
+                <input type="text" id="proj-stack" placeholder="Laravel, PHP, MySQL, React"/>
+              </div>
+              <div class="form-group">
+                <label for="proj-image">Project Image Path or Upload</label>
+                <div class="input-with-btn">
+                  <input type="text" id="proj-image" placeholder="images/project_gym.jpg"/>
+                  <label class="admin-btn-outline upload-label">
+                    Upload
+                    <input type="file" id="proj-image-file" accept="image/*" hidden/>
+                  </label>
+                </div>
+              </div>
+              <div class="form-actions">
+                <button type="submit" class="admin-btn-red" id="proj-submit-btn">Save Project</button>
+                <button type="button" class="admin-btn-outline" id="proj-cancel-btn" style="display:none;">Cancel Edit</button>
+              </div>
+            </form>
+          </div>
+          <div class="panel-card">
+            <h2>Existing Projects</h2>
+            <div id="projects-list" class="item-list"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB: JOURNEY / ROLES -->
+      <div id="tab-journey" class="tab-panel">
+        <div class="panel-grid">
+          <div class="panel-card">
+            <h2 id="journey-form-title">Add Role / Journey Step</h2>
+            <form id="journey-form" class="admin-form">
+              <input type="hidden" id="jrn-id"/>
+              <div class="form-row-2">
+                <div class="form-group">
+                  <label for="jrn-number">Index Number</label>
+                  <input type="text" id="jrn-number" placeholder="01"/>
+                </div>
+                <div class="form-group">
+                  <label for="jrn-period">Period / Year</label>
+                  <input type="text" id="jrn-period" required placeholder="PRESENT or 2024 – 2025"/>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="jrn-company">Company / Label</label>
+                <input type="text" id="jrn-company" required placeholder="DEVELOPER LAB"/>
+              </div>
+              <div class="form-group">
+                <label for="jrn-title">Role Title</label>
+                <input type="text" id="jrn-title" required placeholder="Full Stack Developer &amp; Graphic Designer"/>
+              </div>
+              <div class="form-group">
+                <label for="jrn-desc">Role Description</label>
+                <textarea id="jrn-desc" rows="4" required placeholder="Describe your responsibilities and impact..."></textarea>
+              </div>
+              <div class="form-actions">
+                <button type="submit" class="admin-btn-red">Save Role</button>
+                <button type="button" class="admin-btn-outline" id="jrn-cancel-btn" style="display:none;">Cancel Edit</button>
+              </div>
+            </form>
+          </div>
+          <div class="panel-card">
+            <h2>Current Roles &amp; Journey</h2>
+            <div id="journey-list" class="item-list"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB: ACHIEVEMENTS -->
+      <div id="tab-achievements" class="tab-panel">
+        <div class="panel-grid">
+          <div class="panel-card">
+            <h2 id="ach-form-title">Add Achievement</h2>
+            <form id="ach-form" class="admin-form">
+              <input type="hidden" id="ach-id"/>
+              <div class="form-group">
+                <label for="ach-title">Achievement Title</label>
+                <input type="text" id="ach-title" required placeholder="e.g. Hackathon Winner / Certification"/>
+              </div>
+              <div class="form-row-2">
+                <div class="form-group">
+                  <label for="ach-issuer">Organization / Issuer</label>
+                  <input type="text" id="ach-issuer" required placeholder="e.g. Developer Lab / Rajagiri"/>
+                </div>
+                <div class="form-group">
+                  <label for="ach-year">Year</label>
+                  <input type="text" id="ach-year" required placeholder="2026"/>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="ach-desc">Details</label>
+                <textarea id="ach-desc" rows="3" required placeholder="Describe the achievement..."></textarea>
+              </div>
+              <div class="form-actions">
+                <button type="submit" class="admin-btn-red">Save Achievement</button>
+                <button type="button" class="admin-btn-outline" id="ach-cancel-btn" style="display:none;">Cancel Edit</button>
+              </div>
+            </form>
+          </div>
+          <div class="panel-card">
+            <h2>Achievements List</h2>
+            <div id="achievements-list" class="item-list"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB: PROFILE & DETAILS -->
+      <div id="tab-profile" class="tab-panel">
+        <div class="panel-card">
+          <h2>Profile, Bio &amp; Hero Details</h2>
+          <form id="profile-form" class="admin-form">
+            <div class="form-row-2">
+              <div class="form-group">
+                <label for="prof-greeting">Hero Greeting</label>
+                <input type="text" id="prof-greeting"/>
+              </div>
+              <div class="form-group">
+                <label for="prof-disciplines">Disciplines Row (comma-separated)</label>
+                <input type="text" id="prof-disciplines"/>
+              </div>
+            </div>
+            <div class="form-row-2">
+              <div class="form-group">
+                <label for="prof-role1">Hero Role Line 1</label>
+                <input type="text" id="prof-role1"/>
+              </div>
+              <div class="form-group">
+                <label for="prof-role2">Hero Role Line 2</label>
+                <input type="text" id="prof-role2"/>
+              </div>
+            </div>
+            <div class="form-row-2">
+              <div class="form-group">
+                <label for="prof-city">City</label>
+                <input type="text" id="prof-city"/>
+              </div>
+              <div class="form-group">
+                <label for="prof-country">Country</label>
+                <input type="text" id="prof-country"/>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="prof-hero-image">Portrait Image Path or Upload</label>
+              <div class="input-with-btn">
+                <input type="text" id="prof-hero-image"/>
+                <label class="admin-btn-outline upload-label">
+                  Upload
+                  <input type="file" id="prof-image-file" accept="image/*" hidden/>
+                </label>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="prof-about-headline">About Section Headline</label>
+              <input type="text" id="prof-about-headline"/>
+            </div>
+            <div class="form-group">
+              <label for="prof-about-sub">About Lead Summary</label>
+              <textarea id="prof-about-sub" rows="2"></textarea>
+            </div>
+            <div class="form-group">
+              <label for="prof-about-bio">About Full Bio</label>
+              <textarea id="prof-about-bio" rows="4"></textarea>
+            </div>
+            <div class="form-row-2">
+              <div class="form-group">
+                <label for="prof-education">Education Degree</label>
+                <input type="text" id="prof-education"/>
+              </div>
+              <div class="form-group">
+                <label for="prof-college">College / University</label>
+                <input type="text" id="prof-college"/>
+              </div>
+            </div>
+            <div class="form-row-2">
+              <div class="form-group">
+                <label for="prof-period">Degree Period</label>
+                <input type="text" id="prof-period"/>
+              </div>
+              <div class="form-group">
+                <label for="prof-grad">Graduation Year</label>
+                <input type="text" id="prof-grad"/>
+              </div>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="admin-btn-red">Save Profile Details</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- TAB: TECHNICAL INTERESTS -->
+      <div id="tab-interests" class="tab-panel">
+        <div class="panel-grid">
+          <div class="panel-card">
+            <h2 id="int-form-title">Add Technical Interest</h2>
+            <form id="int-form" class="admin-form">
+              <input type="hidden" id="int-id"/>
+              <div class="form-group">
+                <label for="int-title">Title</label>
+                <input type="text" id="int-title" required placeholder="e.g. Cloud Architecture"/>
+              </div>
+              <div class="form-group">
+                <label for="int-desc">Description</label>
+                <textarea id="int-desc" rows="3" required></textarea>
+              </div>
+              <div class="form-actions">
+                <button type="submit" class="admin-btn-red">Save Interest</button>
+                <button type="button" class="admin-btn-outline" id="int-cancel-btn" style="display:none;">Cancel Edit</button>
+              </div>
+            </form>
+          </div>
+          <div class="panel-card">
+            <h2>Technical Interests</h2>
+            <div id="interests-list" class="item-list"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB: MESSAGES -->
+      <div id="tab-messages" class="tab-panel">
+        <div class="panel-card">
+          <h2>Contact Form Messages</h2>
+          <div id="messages-list" class="item-list"></div>
+        </div>
+      </div>
+
+      <!-- TAB: LOGIN & SECURITY SETTINGS -->
+      <div id="tab-security" class="tab-panel">
+        <div class="panel-card">
+          <h2>Owner Login &amp; Authentication Settings</h2>
+          <p class="panel-sub">Configure how only you can log into this management studio.</p>
+          <form id="security-form" class="admin-form">
+            <div class="form-group">
+              <label for="sec-mode">Login Authentication Mode</label>
+              <select id="sec-mode">
+                <option value="email_password">Email + Password</option>
+                <option value="phone_otp">Phone Number + OTP</option>
+                <option value="both">Both (Email/Phone + Password + OTP)</option>
+              </select>
+            </div>
+            <div class="form-row-2">
+              <div class="form-group">
+                <label for="sec-email">Owner Email</label>
+                <input type="email" id="sec-email" required/>
+              </div>
+              <div class="form-group">
+                <label for="sec-phone">Owner Phone Number (with country code)</label>
+                <input type="tel" id="sec-phone" placeholder="+919876543210"/>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="sec-password">New Password (leave blank to keep current password)</label>
+              <input type="password" id="sec-password" minlength="6" placeholder="Minimum 6 characters"/>
+            </div>
+            <div class="form-group">
+              <label for="sec-webhook">Optional SMS/OTP Webhook URL (for external SMS gateway)</label>
+              <input type="url" id="sec-webhook" placeholder="https://your-sms-gateway.example/send"/>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="admin-btn-red">Save Security Settings</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+  <script src="js/admin.js" type="text/javascript"></script>
+</body>
+</html>

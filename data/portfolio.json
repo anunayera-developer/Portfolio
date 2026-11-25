@@ -1,0 +1,231 @@
+{
+  "profile": {
+    "greeting": "HI, I'M ANUNAY.",
+    "roleLine1": "FULL STACK",
+    "roleLine2": "DEVELOPER",
+    "locationCity": "KOCHI,",
+    "locationCountry": "INDIA",
+    "disciplines": [
+      "FULL STACK",
+      "UI/UX DESIGN",
+      "GRAPHIC DESIGN",
+      "MACHINE LEARNING"
+    ],
+    "heroImage": "images/anunay_hero_portrait.jpg",
+    "aboutEyebrowFirst": "ANUNAY",
+    "aboutEyebrowSecond": "BRINI",
+    "aboutHeadline": "B.Sc. (Hons.) CS Student & Full Stack Developer.",
+    "aboutSubheadline": "I am a B.Sc. Computer Science (Honours) student (2024–2028) at Rajagiri College of Social Sciences, Full Stack Developer, UI/UX Designer, and Graphic Designer.",
+    "aboutBio": "I began my industry journey at ERA, a college startup, working as a UI/UX Designer crafting user interfaces and product designs. I then moved to Developer Lab—which was originally a sub-company under ERA and is now a standalone company—expanding my scope into Graphic Designing and Full Stack Web Development. I thrive at the intersection of robust backend logic and elegant visual experiences.",
+    "education": "B.Sc. (Hons.) Computer Science",
+    "college": "Rajagiri College of Social Sciences",
+    "degreePeriod": "2024 – 2028",
+    "graduationYear": "2028",
+    "locationFull": "Kochi, Kerala, India",
+    "stats": [
+      {
+        "value": "7+",
+        "label": "Projects Built",
+        "featured": false
+      },
+      {
+        "value": "2028",
+        "label": "Graduation Year (Hons.)",
+        "featured": true
+      },
+      {
+        "value": "4",
+        "label": "Core Disciplines",
+        "featured": false
+      }
+    ]
+  },
+  "journey": [
+    {
+      "id": "role-1",
+      "number": "01",
+      "title": "Developer Lab — Full Stack & Graphic Design",
+      "description": "Joined Developer Lab—initially established as a specialized sub-company under ERA and now operating as a standalone company. Spearheaded Full Stack Development and Graphic Designing, building end-to-end web apps, clean APIs, and modern visual branding.",
+      "company": "DEVELOPER LAB",
+      "period": "PRESENT"
+    },
+    {
+      "id": "role-2",
+      "number": "02",
+      "title": "ERA — UI/UX Designer & Module Development",
+      "description": "Worked at ERA, an innovative college startup. Led UI/UX design workflows, created intuitive interface prototypes, user journeys, and contributed key feature modules for flagship platforms like Mentur.",
+      "company": "ERA STARTUP",
+      "period": "2024 – 2025"
+    },
+    {
+      "id": "role-3",
+      "number": "03",
+      "title": "Full Stack Engineering & AI Integration",
+      "description": "Engineered comprehensive web applications with Laravel, PHP, Python, FastAPI, and MySQL. Integrated intelligent features including RAG pipelines with ChromaDB and Ollama for automated assistance.",
+      "company": "WEB & AI SYSTEMS",
+      "period": "2025"
+    },
+    {
+      "id": "role-4",
+      "number": "04",
+      "title": "B.Sc. (Hons.) Computer Science Foundation",
+      "description": "Pursuing 4-year Honours Degree (2024–2028) at Rajagiri College of Social Sciences. Deepening theoretical fundamentals in data structures, algorithms, databases, and software engineering.",
+      "company": "HONOURS DEGREE",
+      "period": "2024 – 2028"
+    }
+  ],
+  "achievements": [
+    {
+      "id": "ach-1",
+      "title": "Mentur AI & Module Integration Lead",
+      "issuer": "ERA & Developer Lab",
+      "year": "2025",
+      "description": "Architected and integrated RAG-powered AI assistant modules using FastAPI, Ollama, and ChromaDB into the Mentur student networking platform."
+    },
+    {
+      "id": "ach-2",
+      "title": "UI/UX & Brand Systems Contributor",
+      "issuer": "Developer Lab",
+      "year": "2024 – Present",
+      "description": "Transitioned from ERA's campus startup design team to leading visual identity, graphic design, and full-stack product delivery at standalone Developer Lab."
+    }
+  ],
+  "projects": [
+    {
+      "id": "proj-1",
+      "category": "Web Development",
+      "title": "Lift Haus Gym",
+      "description": "A gym-related digital project focused on presenting fitness services through a modern web interface.",
+      "image": "images/project_gym.jpg",
+      "focusTitle": "Focus Areas:",
+      "focusTags": [
+        "Website Interface Design",
+        "Fitness Information Presentation",
+        "User-friendly Navigation",
+        "Modern Visual Presentation"
+      ],
+      "techStack": "",
+      "repoUrl": "https://github.com/anunayera-developer/Gym"
+    },
+    {
+      "id": "proj-2",
+      "category": "Software Development | Social Impact",
+      "title": "Campus Food Saver",
+      "description": "A campus-focused food-saving concept designed to reduce food wastage by connecting surplus food with people who can use it.",
+      "image": "images/project_foodsaver.jpg",
+      "focusTitle": "Core Concept:",
+      "focusTags": [
+        "Reduce Food Wastage",
+        "Surplus Food Visibility",
+        "Food Redistribution",
+        "Campus Sustainability"
+      ],
+      "techStack": "",
+      "repoUrl": "https://github.com/anunayera-developer/FoodSaver"
+    },
+    {
+      "id": "proj-3",
+      "category": "Full Stack Development | College Project",
+      "title": "BikeMS – Bike Management System",
+      "description": "A web-based Bike Management System developed as a college project to manage bike-related operations through structured user roles and access control.",
+      "image": "images/project_bikems.jpg",
+      "focusTitle": "Key Modules:",
+      "focusTags": [
+        "Admin Management",
+        "Staff Management",
+        "Customer Management",
+        "Delivery Boy Management",
+        "Dashboard & Reports",
+        "Role-Based Access Control"
+      ],
+      "techStack": "Laravel, PHP, MySQL, HTML, CSS, JavaScript",
+      "repoUrl": "https://github.com/anunayera-developer/BikeMS"
+    },
+    {
+      "id": "proj-4",
+      "category": "Professional Experience | Full Stack Development",
+      "title": "Mentur",
+      "description": "Contributed to the development of Mentur, an educational and professional networking platform developed under ERA and Developer Lab, developing and integrating additional modules, AI integrations, and UI/UX flows rather than building from scratch.",
+      "image": "images/project_mentur.jpg",
+      "focusTitle": "Areas of Contribution:",
+      "focusTags": [
+        "Module Integration",
+        "Mentor Connect Functionality",
+        "Student & Professional Networking",
+        "Mentur AI Integration"
+      ],
+      "techStack": "Laravel, PHP, MySQL, FastAPI, Python, Ollama, ChromaDB, RAG",
+      "repoUrl": "https://github.com/anunayera-developer/mentur"
+    },
+    {
+      "id": "proj-5",
+      "category": "Software Development | Security",
+      "title": "Secure File Sharing",
+      "description": "A project focused on providing a secure way to share files between users with controlled authorization and reliable data handling.",
+      "image": "images/project_secureshare.jpg",
+      "focusTitle": "Core Concept:",
+      "focusTags": [
+        "File Uploading & Sharing",
+        "Controlled File Access",
+        "Secure File Transfer",
+        "User-Friendly Interface"
+      ],
+      "techStack": "",
+      "repoUrl": "https://github.com/anunayera-developer/secure-file-sharing"
+    },
+    {
+      "id": "proj-6",
+      "category": "Game Development",
+      "title": "Sudoku",
+      "description": "A digital Sudoku project focused on number puzzles, validation algorithms, and logical problem-solving.",
+      "image": "images/project_sudoku.jpg",
+      "focusTitle": "Focus Areas:",
+      "focusTags": [
+        "Sudoku Puzzle Logic",
+        "Number Validation",
+        "Interactive Gameplay",
+        "User Experience"
+      ],
+      "techStack": "",
+      "repoUrl": "https://github.com/anunayera-developer/Sudokku"
+    },
+    {
+      "id": "proj-7",
+      "category": "College Activity | Game Development",
+      "title": "Tic-Tac-Toe",
+      "description": "A digital implementation of the classic Tic-Tac-Toe game developed as part of a college activity to explore state management and winning condition detection.",
+      "image": "images/project_tictactoe.jpg",
+      "focusTitle": "Focus Areas:",
+      "focusTags": [
+        "Game Logic",
+        "Interactive User Interface",
+        "Player Interactions",
+        "Winning-Condition Detection"
+      ],
+      "techStack": "",
+      "repoUrl": "https://github.com/anunayera-developer/Tic-Tac-Toe"
+    }
+  ],
+  "interests": [
+    {
+      "id": "int-1",
+      "title": "Full Stack Web Development",
+      "description": "Building end-to-end web applications, integrating frontend user experiences with backend databases and business logic."
+    },
+    {
+      "id": "int-2",
+      "title": "UI/UX & Graphic Design",
+      "description": "Focusing on layout hierarchy, intuitive usability, responsive design systems, and polished digital aesthetics."
+    },
+    {
+      "id": "int-3",
+      "title": "Machine Learning & AI",
+      "description": "Studying data processing, model training, intelligent systems, and retrieval-augmented generation (RAG) workflows."
+    },
+    {
+      "id": "int-4",
+      "title": "Software Development & Databases",
+      "description": "Designing relational schemas, structured application architectures, role-based access control, and secure file handling."
+    }
+  ]
+}

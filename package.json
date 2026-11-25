@@ -1,0 +1,9 @@
+{
+  "name": "anunay-brini-portfolio",
+  "version": "2.0.0",
+  "description": "Personal portfolio with optical-illusion page transitions and owner-only CMS backend",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  }
+}

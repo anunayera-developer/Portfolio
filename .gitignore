@@ -3,3 +3,6 @@ __pycache__/
 *.pyc
 .DS_Store
 Thumbs.db
+data/auth.json
+data/messages.json
+node_modules/

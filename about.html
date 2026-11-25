@@ -18,17 +18,27 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap"/>
   <link href="images/anunay_favicon.svg" rel="shortcut icon" type="image/x-icon"/>
   <link href="images/anunay_favicon.svg" rel="apple-touch-icon"/>
-  <script>
-    (function() {
-      const savedTheme = localStorage.getItem('portfolio_theme') || 'dark';
-      document.documentElement.setAttribute('data-theme', savedTheme);
-      document.addEventListener('DOMContentLoaded', () => {
-        document.body.setAttribute('data-theme', savedTheme);
-      });
-    })();
-  </script>
 </head>
 <body>
+
+  <!-- Optical Illusion Page Transition Overlay -->
+  <div id="page-illusion-overlay" class="page-illusion-overlay is-entering" aria-hidden="true">
+    <div class="illusion-blades">
+      <div class="illusion-blade"></div>
+      <div class="illusion-blade"></div>
+      <div class="illusion-blade"></div>
+      <div class="illusion-blade"></div>
+      <div class="illusion-blade"></div>
+      <div class="illusion-blade"></div>
+      <div class="illusion-blade"></div>
+      <div class="illusion-blade"></div>
+    </div>
+    <div class="illusion-vortex">
+      <div class="vortex-ring ring-1"></div>
+      <div class="vortex-ring ring-2"></div>
+      <div class="vortex-ring ring-3"></div>
+    </div>
+  </div>
 
   <!-- Navigation -->
   <div role="banner" class="navigation w-nav">
@@ -36,8 +46,7 @@
       <div class="container-navigation">
         <div class="navigation-left">
           <a href="index.html" class="brand w-nav-brand">
-            <img src="images/anunay_logo.svg" loading="eager" alt="Anunay Brini Logo" class="logo-light"/>
-            <img src="images/anunay_logo_dark.svg" loading="eager" alt="Anunay Brini Logo" class="logo-dark"/>
+            <img src="images/anunay_logo.svg" loading="eager" alt="Anunay Brini Logo"/>
           </a>
         </div>
         <nav role="navigation" class="menu-wrap w-nav-menu">
@@ -58,18 +67,6 @@
           </a>
         </nav>
         <div class="navigation-right">
-          <!-- Dark / Light Theme Toggle Switch -->
-          <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle Theme" title="Switch Theme (Dark / Light)">
-            <span class="theme-icon-light">☀️</span>
-            <span class="theme-icon-dark">🌙</span>
-            <span class="theme-toggle-text">Dark</span>
-          </button>
-          
-          <a href="index.html?intro=replay" class="replay-intro-btn" title="View Cyber Terminal Intro">
-            <span class="replay-icon">⚡</span>
-            <span class="replay-text">Intro</span>
-          </a>
-
           <div class="menu-button w-nav-button" id="menu-toggle" aria-label="Toggle Navigation">
             <span class="hamburger-bar"></span>
             <span class="hamburger-bar"></span>
@@ -312,71 +309,21 @@
     </div>
   </div>
 
-  <!-- Contact Info Grid -->
-  <div class="section-large">
-    <div class="container-large">
-      <div class="w-layout-grid grid-contact">
-        <div class="contact-block">
-          <div class="number-block-circle">
-            <img src="images/62679078533d16192d4c7b81_Icon_Message.svg" loading="lazy" alt="Email Icon"/>
-          </div>
-          <div>
-            <h6 class="heading-title">Education</h6>
-            <p class="paragraph-regular">B.Sc. (Hons.) Computer Science (2024–2028)</p>
-          </div>
-        </div>
-        <div class="contact-block">
-          <div class="number-block-circle">
-            <img src="images/62679078533d1680364c7b83_Icon_Call.svg" loading="lazy" alt="College Icon"/>
-          </div>
-          <div>
-            <h6 class="heading-title">College</h6>
-            <p class="paragraph-regular">Rajagiri College of Social Sciences</p>
-          </div>
-        </div>
-        <div class="contact-block">
-          <div class="number-block-circle">
-            <img src="images/62679078533d16416a4c7b82_Icon_Map.svg" loading="lazy" alt="Location Icon"/>
-          </div>
-          <div>
-            <h6 class="heading-title">Location</h6>
-            <p class="paragraph-regular">Kochi, Kerala, India</p>
-          </div>
-        </div>
+    <!-- Simple Footer -->
+  <footer class="section-footer simple-footer">
+    <div class="simple-footer-inner">
+      <div class="simple-footer-brand">ANUNAY<span class="red-dot">.</span> BRINI</div>
+      <div class="simple-footer-links">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="index.html#Projects">Projects</a>
+        <a href="index.html#Achievements">Achievements</a>
+        <a href="#Contact">Contact</a>
+        <a href="admin.html">Manage</a>
       </div>
+      <div class="simple-footer-copy">&copy; 2026 Anunay Brini</div>
     </div>
-  </div>
-
-  <!-- Footer -->
-  <div class="section-footer">
-    <div class="container-footer">
-      <div class="footer-bottom">
-        <div class="w-layout-grid grid-footer">
-          <div class="footer-wrapper">
-            <a href="index.html" class="w-inline-block">
-              <img src="images/anunay_logo_white.svg" loading="lazy" alt="Anunay Brini"/>
-            </a>
-            <div class="footer-link-wrapper">
-              <a href="index.html" class="footer-link w-inline-block"><div class="text-block-3"><div>Home</div></div></a>
-              <a href="about.html" class="footer-link w-inline-block"><div class="text-block-3"><div>About</div></div></a>
-              <a href="index.html#Projects" class="footer-link w-inline-block"><div class="text-block-3"><div>Projects</div></div></a>
-              <a href="#Contact" class="footer-link w-inline-block"><div class="text-block-3"><div>Contact</div></div></a>
-            </div>
-          </div>
-          <div class="footer-wrapper">
-            <p class="body-small-normal title-gray-100">© 2026 Anunay Brini. All rights reserved.</p>
-            <div class="w-layout-grid grid-footer-social">
-              <a href="https://github.com/anunayera-developer" target="_blank" rel="noopener noreferrer" class="social-link w-inline-block" title="GitHub">
-                <img src="images/62673e4070051a6f350ad8e8_Icon_Twitter.svg" loading="lazy" alt="GitHub"/>
-              </a>
-              <a href="https://linkedin.com/in/anunaybrini" target="_blank" rel="noopener noreferrer" class="social-link w-inline-block" title="LinkedIn">
-                <img src="images/62673e4070051a4ae40ad8e9_Icon_LinkedIn.svg" loading="lazy" alt="LinkedIn"/>
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+  </footer>
   </div>
 
   <script src="js/jquery-3.5.1.min.dc5e7f18c8.js" type="text/javascript"></script>
