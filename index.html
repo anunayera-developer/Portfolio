@@ -40,41 +40,42 @@
     </div>
   </div>
 
-  <!-- 10-Second Technical Coding Intro (Red, Black & White) -->
-  <div id="tech-code-intro" class="tech-code-intro" role="dialog" aria-modal="true" aria-label="Technical Portfolio Compiler Intro">
-    <div class="tech-intro-grid-bg"></div>
-    <div class="tech-intro-shell">
-      <div class="tech-intro-topbar">
-        <div class="tech-intro-id">
-          <span class="tech-dot-red"></span>
-          <span>ANUNAY_BRINI // PORTFOLIO_RUNTIME.TS</span>
-        </div>
-        <div class="tech-intro-controls">
-          <span id="tech-timer-readout" class="tech-timer-readout">00.0s / 10.0s</span>
-          <button id="tech-intro-skip" class="tech-intro-skip" type="button">[ SKIP ]</button>
-        </div>
-      </div>
+  <!-- 10-Second Unique Kinetic Canvas & Cipher Intro (Red, Black & White) -->
+  <div id="tech-code-intro" class="unique-intro" role="dialog" aria-modal="true" aria-label="Portfolio Intro Animation">
+    <canvas id="intro-neural-canvas" class="intro-neural-canvas"></canvas>
 
-      <div class="tech-intro-panes">
-        <div class="tech-code-pane">
-          <div class="pane-header">SOURCE // ARCHITECTURE.TS</div>
-          <pre id="tech-code-stream" class="tech-code-stream"></pre>
-        </div>
-        <div class="tech-log-pane">
-          <div class="pane-header">STDOUT // BUILD TELEMETRY</div>
-          <div id="tech-log-stream" class="tech-log-stream"></div>
-        </div>
+    <div class="intro-hud-top">
+      <div class="intro-hud-tag">
+        <span class="intro-pulse-dot"></span>
+        <span>ANUNAY.BRINI // SYS.2026</span>
       </div>
+      <div class="intro-hud-right">
+        <span id="tech-timer-readout" class="intro-timer">00.0s / 10.0s</span>
+        <button id="tech-intro-skip" class="intro-skip-btn" type="button">SKIP</button>
+      </div>
+    </div>
 
-      <div class="tech-intro-footer">
-        <div class="tech-progress-meta">
-          <span id="tech-stage-label">INITIALIZING RUNTIME ENVIRONMENT...</span>
-          <span id="tech-percent-label">0%</span>
-        </div>
-        <div class="tech-progress-track">
-          <div id="tech-progress-fill" class="tech-progress-fill"></div>
-        </div>
+    <div class="intro-center-stage">
+      <!-- Precision SVG Blueprint Reticle -->
+      <svg class="intro-svg-reticle" viewBox="0 0 240 240" fill="none" aria-hidden="true">
+        <circle class="reticle-ring-outer" cx="120" cy="120" r="108" stroke="#111111" stroke-width="1" stroke-dasharray="6 6"/>
+        <circle class="reticle-ring-red" cx="120" cy="120" r="88" stroke="#e63929" stroke-width="2"/>
+        <path class="reticle-cross" d="M120 4 V32 M120 208 V236 M4 120 H32 M208 120 H236" stroke="#111111" stroke-width="1.5"/>
+        <polygon class="reticle-diamond" points="120,46 194,120 120,194 46,120" stroke="#111111" stroke-width="1.2"/>
+      </svg>
+
+      <div class="intro-eyebrow" id="intro-cipher-eyebrow">INITIALIZING_RUNTIME</div>
+      <h1 class="intro-display-name" id="intro-cipher-name">0x00000000000</h1>
+      <div class="intro-cipher-roles" id="intro-cipher-roles">DECODING_STACK_MATRIX...</div>
+      <div class="intro-meta-line" id="intro-meta-line">KOCHI, INDIA // ERA ➔ DEVELOPER LAB</div>
+    </div>
+
+    <div class="intro-hud-bottom">
+      <div class="intro-stage-status" id="tech-stage-label">CONSTRUCTING NEURAL MESH</div>
+      <div class="intro-progress-line">
+        <div class="intro-progress-bar" id="tech-progress-fill"></div>
       </div>
+      <div class="intro-percent" id="tech-percent-label">0%</div>
     </div>
   </div>
 

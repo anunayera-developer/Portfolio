@@ -5,11 +5,14 @@
 
 document.addEventListener('DOMContentLoaded', () => {
   // ============================================================
-  // 1. 10-SECOND CODING-BASED TECHNICAL INTRO (RED, BLACK & WHITE)
+  // 1. 10-SECOND UNIQUE KINETIC CANVAS, SVG & CIPHER INTRO
   // ============================================================
   const techIntro = document.getElementById('tech-code-intro');
-  const codeStreamEl = document.getElementById('tech-code-stream');
-  const logStreamEl = document.getElementById('tech-log-stream');
+  const canvas = document.getElementById('intro-neural-canvas');
+  const eyebrowEl = document.getElementById('intro-cipher-eyebrow');
+  const nameEl = document.getElementById('intro-cipher-name');
+  const rolesEl = document.getElementById('intro-cipher-roles');
+  const metaLineEl = document.getElementById('intro-meta-line');
   const timerReadoutEl = document.getElementById('tech-timer-readout');
   const progressFillEl = document.getElementById('tech-progress-fill');
   const percentLabelEl = document.getElementById('tech-percent-label');
@@ -27,6 +30,22 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  function scrambleText(target, progress) {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#$%&*+=';
+    const lockedCount = Math.floor(target.length * Math.max(0, Math.min(1, progress)));
+    let out = '';
+    for (let i = 0; i < target.length; i++) {
+      if (target[i] === ' ') {
+        out += ' ';
+      } else if (i < lockedCount) {
+        out += target[i];
+      } else {
+        out += chars[Math.floor(Math.random() * chars.length)];
+      }
+    }
+    return out;
+  }
+
   function runTechIntro() {
     const DURATION_MS = 10000;
     const seen = sessionStorage.getItem('portfolio_tech_intro_seen') === 'true';
@@ -37,43 +56,43 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    // Keep illusion overlay hidden behind intro until intro finishes
     if (illusionOverlay) {
       illusionOverlay.classList.remove('is-entering');
       illusionOverlay.classList.add('is-revealed');
     }
 
-    const codeLines = [
-      '<span class="cmt">// anunay-brini/portfolio-runtime.ts</span>',
-      '<span class="kw">import</span> { OpticalIllusion, StackEngine } <span class="kw">from</span> <span class="str">"@devlab/core"</span>;',
-      '',
-      '<span class="kw">export class</span> PortfolioRuntime {',
-      '  <span class="kw">readonly</span> author = <span class="str">"Anunay Brini"</span>;',
-      '  <span class="kw">readonly</span> location = <span class="str">"Kochi, India"</span>;',
-      '  <span class="kw">readonly</span> degree = <span class="str">"B.Sc. (Hons.) CS [2024-2028]"</span>;',
-      '  <span class="kw">readonly</span> experience = [<span class="str">"ERA"</span>, <span class="str">"Developer Lab"</span>];',
-      '  <span class="kw">readonly</span> palette = { bg: <span class="str">"#FFFFFF"</span>, ink: <span class="str">"#111111"</span>, accent: <span class="str">"#E63929"</span> };',
-      '',
-      '  <span class="kw">async</span> boot(): Promise&lt;void&gt; {',
-      '    <span class="kw">await</span> StackEngine.mount([<span class="str">"FullStack"</span>, <span class="str">"UI/UX"</span>, <span class="str">"Graphic"</span>, <span class="str">"ML"</span>]);',
-      '    <span class="kw">await</span> OpticalIllusion.attachScrollObserver({ perspective: 1000 });',
-      '    <span class="kw">return</span> <span class="kw">this</span>.renderProductionBundle();',
-      '  }',
-      '}'
-    ];
+    // Setup Neural Constellation Canvas
+    const ctx = canvas ? canvas.getContext('2d') : null;
+    let width = 0;
+    let height = 0;
+    const mouse = { x: -9999, y: -9999 };
+    const codeTokens = ['0xFF', 'render()', 'api/v2', 'matrix[]', 'rag.init()', 'ui/ux', 'scale(1)'];
+    const nodes = [];
 
-    const logSteps = [
-      { at: 0.0, stage: 'BOOTING KERNEL & RUNTIME...', text: '[00.0s] $ init --target=anunay-portfolio --mode=production' },
-      { at: 1.2, stage: 'RESOLVING DEPENDENCIES...', text: '[01.2s] > Resolving modules: [react, fastapi, laravel, mysql, rag]' },
-      { at: 2.5, stage: 'COMPILING DESIGN TOKENS...', text: '[02.5s] > Compiling palette: #FFFFFF / #111111 / #E63929 [OK]' },
-      { at: 4.0, stage: 'MOUNTING PROJECT REGISTRY...', text: '[04.0s] > Mounting 7 repositories from data/portfolio.json' },
-      { at: 5.5, stage: 'HYDRATING TIMELINE...', text: '[05.5s] > Loading ERA -> Developer Lab engineering journey' },
-      { at: 7.0, stage: 'ATTACHING SCROLL ILLUSIONS...', text: '[07.0s] > Binding 3D perspective & clip-path scroll observers' },
-      { at: 8.5, stage: 'VERIFYING INTEGRITY...', text: '[08.5s] > SHA256 checksum verified: 9F4A..C10E [PASS]', pass: true },
-      { at: 9.5, stage: 'LAUNCHING PORTFOLIO...', text: '[09.5s] > Build ready. Executing kinetic transition...', pass: true }
-    ];
+    function resizeCanvas() {
+      if (!canvas) return;
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+    window.addEventListener('mousemove', (e) => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+    }, { passive: true });
 
-    let shownLogs = 0;
+    const nodeCount = window.innerWidth < 768 ? 36 : 70;
+    for (let i = 0; i < nodeCount; i++) {
+      nodes.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        vx: (Math.random() - 0.5) * 1.1,
+        vy: (Math.random() - 0.5) * 1.1,
+        isRed: i % 5 === 0,
+        token: i % 10 === 0 ? codeTokens[(i / 10) % codeTokens.length] : ''
+      });
+    }
+
     const startTime = performance.now();
     let finished = false;
 
@@ -81,6 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (finished) return;
       finished = true;
       sessionStorage.setItem('portfolio_tech_intro_seen', 'true');
+      window.removeEventListener('resize', resizeCanvas);
       if (illusionOverlay) {
         illusionOverlay.classList.remove('is-revealed');
         illusionOverlay.classList.add('is-entering');
@@ -88,11 +108,90 @@ document.addEventListener('DOMContentLoaded', () => {
       techIntro.classList.add('is-done');
       setTimeout(() => {
         revealPage();
-      }, 120);
+      }, 140);
     }
 
     if (skipBtn) {
       skipBtn.addEventListener('click', finishIntro);
+    }
+
+    function drawCanvas(ratio) {
+      if (!ctx) return;
+      ctx.clearRect(0, 0, width, height);
+
+      // Subtle architectural blueprint grid
+      ctx.strokeStyle = 'rgba(17, 17, 17, 0.04)';
+      ctx.lineWidth = 1;
+      const step = 48;
+      for (let x = 0; x < width; x += step) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, height);
+        ctx.stroke();
+      }
+      for (let y = 0; y < height; y += step) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(width, y);
+        ctx.stroke();
+      }
+
+      const cx = width / 2;
+      const cy = height / 2;
+      const converge = ratio > 0.72 ? (ratio - 0.72) / 0.28 : 0;
+
+      for (let i = 0; i < nodes.length; i++) {
+        const n = nodes[i];
+        n.x += n.vx;
+        n.y += n.vy;
+
+        if (n.x < 0 || n.x > width) n.vx *= -1;
+        if (n.y < 0 || n.y > height) n.vy *= -1;
+
+        // Subtle attraction toward center in final 2.8s
+        if (converge > 0) {
+          n.x += (cx - n.x) * 0.025 * converge;
+          n.y += (cy - n.y) * 0.025 * converge;
+        }
+
+        // Mouse repulsion
+        const dxm = n.x - mouse.x;
+        const dym = n.y - mouse.y;
+        const distM = Math.hypot(dxm, dym);
+        if (distM < 120 && distM > 0) {
+          n.x += (dxm / distM) * 2.2;
+          n.y += (dym / distM) * 2.2;
+        }
+
+        // Connect nearby nodes
+        for (let j = i + 1; j < nodes.length; j++) {
+          const m = nodes[j];
+          const dist = Math.hypot(n.x - m.x, n.y - m.y);
+          if (dist < 145) {
+            const alpha = (1 - dist / 145) * 0.28;
+            ctx.strokeStyle = (n.isRed || m.isRed)
+              ? `rgba(230, 57, 41, ${alpha * 1.4})`
+              : `rgba(17, 17, 17, ${alpha})`;
+            ctx.lineWidth = (n.isRed || m.isRed) ? 1.2 : 0.8;
+            ctx.beginPath();
+            ctx.moveTo(n.x, n.y);
+            ctx.lineTo(m.x, m.y);
+            ctx.stroke();
+          }
+        }
+
+        // Draw node
+        ctx.fillStyle = n.isRed ? '#e63929' : '#111111';
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, n.isRed ? 3 : 2, 0, Math.PI * 2);
+        ctx.fill();
+
+        if (n.token) {
+          ctx.fillStyle = n.isRed ? 'rgba(230, 57, 41, 0.75)' : 'rgba(17, 17, 17, 0.45)';
+          ctx.font = '10px "Courier New", monospace';
+          ctx.fillText(n.token, n.x + 7, n.y + 3);
+        }
+      }
     }
 
     function tick(now) {
@@ -106,24 +205,25 @@ document.addEventListener('DOMContentLoaded', () => {
       if (progressFillEl) progressFillEl.style.width = `${pct}%`;
       if (percentLabelEl) percentLabelEl.textContent = `${pct}%`;
 
-      // Stream code lines progressively over 9.2s
-      if (codeStreamEl) {
-        const lineCount = Math.min(codeLines.length, Math.floor((elapsed / 9000) * codeLines.length) + 1);
-        codeStreamEl.innerHTML = codeLines.slice(0, lineCount).join('\n');
-      }
+      drawCanvas(ratio);
 
-      // Append telemetry logs at scheduled timestamps
-      while (shownLogs < logSteps.length && elapsed / 1000 >= logSteps[shownLogs].at) {
-        const step = logSteps[shownLogs];
-        if (stageLabelEl) stageLabelEl.textContent = step.stage;
-        if (logStreamEl) {
-          const entry = document.createElement('div');
-          entry.className = `tech-log-entry${step.pass ? ' is-pass' : ''}`;
-          entry.textContent = step.text;
-          logStreamEl.appendChild(entry);
-          logStreamEl.scrollTop = logStreamEl.scrollHeight;
-        }
-        shownLogs++;
+      // Act 1 -> Act 2 -> Act 3 Cipher & Stage Choreography
+      if (ratio < 0.35) {
+        if (stageLabelEl) stageLabelEl.textContent = 'CONSTRUCTING NEURAL MESH';
+        if (eyebrowEl) eyebrowEl.textContent = scrambleText('SYSTEM_ARCHITECT', ratio / 0.35);
+        if (nameEl) nameEl.textContent = scrambleText('ANUNAY BRINI', ratio * 0.4);
+      } else if (ratio < 0.72) {
+        const subRatio = (ratio - 0.35) / 0.37;
+        if (stageLabelEl) stageLabelEl.textContent = 'DECODING IDENTITY CIPHER';
+        if (eyebrowEl) eyebrowEl.textContent = 'SYSTEM_ARCHITECT';
+        if (nameEl) nameEl.textContent = scrambleText('ANUNAY BRINI', subRatio);
+        if (rolesEl) rolesEl.textContent = scrambleText('FULL STACK  |  UI/UX  |  GRAPHIC DESIGN  |  ML', subRatio);
+        if (subRatio > 0.5 && metaLineEl) metaLineEl.classList.add('is-shown');
+      } else {
+        if (stageLabelEl) stageLabelEl.textContent = ratio > 0.9 ? 'ENTERING WORKSPACE' : 'CONVERGING ARCHITECTURE';
+        if (nameEl) nameEl.textContent = 'ANUNAY BRINI';
+        if (rolesEl) rolesEl.textContent = 'FULL STACK  |  UI/UX  |  GRAPHIC DESIGN  |  ML';
+        if (metaLineEl) metaLineEl.classList.add('is-shown');
       }
 
       if (elapsed >= DURATION_MS) {
