@@ -305,19 +305,25 @@ body {
   box-shadow: 0 26px 55px -10px rgba(17, 17, 17, 0.2), 0 0 0 2px var(--red);
 }
 
-/* ---- Ticker Banner (Slanted Black Bar Matching Slanted Text) ---- */
+/* ---- Ticker Banner (Slanted Black Bar Layered Up Cleanly) ---- */
 .section-banner {
   display: block !important;
+  position: relative !important;
+  z-index: 50 !important;
   background-color: transparent !important;
   color: var(--white);
-  overflow: hidden !important;
-  padding: 26px 0 !important;
+  overflow: visible !important;
+  padding: 24px 0 !important;
+  margin-top: -12px !important;
+  margin-bottom: -12px !important;
   white-space: nowrap;
 }
 
 .banner-wrapper {
   display: flex;
   align-items: center;
+  position: relative;
+  z-index: 51;
   overflow: hidden;
   width: 114% !important;
   margin-left: -7% !important;
@@ -327,7 +333,7 @@ body {
   border-bottom: 2px solid var(--red);
   transform: rotate(-2.5deg) !important;
   padding: 2px 0 !important;
-  box-shadow: 0 10px 26px rgba(17, 17, 17, 0.12);
+  box-shadow: 0 12px 28px rgba(17, 17, 17, 0.16);
 }
 
 .banner {
