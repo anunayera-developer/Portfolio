@@ -1816,3 +1816,274 @@ body {
     gap: 14px;
   }
 }
+
+
+/* ============================================================
+   10-SECOND TECHNICAL CODING INTRO (RED, BLACK & WHITE)
+   ============================================================ */
+.tech-code-intro {
+  position: fixed;
+  inset: 0;
+  z-index: 999998;
+  background-color: #ffffff;
+  color: #111111;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  font-family: 'Courier New', Consolas, monospace;
+  transition: opacity 0.55s ease, visibility 0.55s ease;
+}
+
+.tech-code-intro.is-done {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.tech-intro-grid-bg {
+  position: absolute;
+  inset: 0;
+  background-size: 28px 28px;
+  background-image:
+    linear-gradient(to right, rgba(17, 17, 17, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(17, 17, 17, 0.05) 1px, transparent 1px);
+  pointer-events: none;
+}
+
+.tech-intro-shell {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 920px;
+  background: #111111;
+  color: #ffffff;
+  border: 2px solid #111111;
+  border-top: 4px solid #e63929;
+  border-radius: 12px;
+  box-shadow: 0 28px 70px rgba(17, 17, 17, 0.22);
+  overflow: hidden;
+}
+
+.tech-intro-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 18px;
+  background: #18181b;
+  border-bottom: 1px solid #2c2c34;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.tech-intro-id {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #ffffff;
+}
+
+.tech-dot-red {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #e63929;
+  display: inline-block;
+  animation: techPulse 1s infinite alternate;
+}
+
+@keyframes techPulse {
+  from { opacity: 0.5; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1.2); }
+}
+
+.tech-intro-controls {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.tech-timer-readout {
+  color: #e63929;
+  font-weight: 700;
+}
+
+.tech-intro-skip {
+  background: transparent;
+  border: 1px solid #44444e;
+  color: #cccccc;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tech-intro-skip:hover {
+  border-color: #e63929;
+  background: #e63929;
+  color: #ffffff;
+}
+
+.tech-intro-panes {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  min-height: 300px;
+}
+
+.tech-code-pane {
+  padding: 16px 18px;
+  border-right: 1px solid #2c2c34;
+  background: #0d0d10;
+}
+
+.tech-log-pane {
+  padding: 16px 18px;
+  background: #141418;
+}
+
+.pane-header {
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  color: #e63929;
+  font-weight: 700;
+  margin-bottom: 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #26262e;
+}
+
+.tech-code-stream {
+  margin: 0;
+  font-family: inherit;
+  font-size: 0.78rem;
+  line-height: 1.55;
+  color: #e8e8ee;
+  white-space: pre-wrap;
+  word-break: break-word;
+  min-height: 240px;
+}
+
+.tech-code-stream .kw {
+  color: #e63929;
+  font-weight: 700;
+}
+
+.tech-code-stream .str {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.tech-code-stream .cmt {
+  color: #7c7c88;
+}
+
+.tech-log-stream {
+  font-size: 0.76rem;
+  line-height: 1.6;
+  color: #c8c8d2;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  max-height: 250px;
+  overflow: hidden;
+}
+
+.tech-log-entry {
+  border-left: 2px solid #e63929;
+  padding-left: 8px;
+  animation: logFadeIn 0.22s ease;
+}
+
+.tech-log-entry.is-pass {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+@keyframes logFadeIn {
+  from { opacity: 0; transform: translateX(-6px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.tech-intro-footer {
+  padding: 14px 18px 18px;
+  background: #18181b;
+  border-top: 1px solid #2c2c34;
+}
+
+.tech-progress-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #dcdce2;
+  margin-bottom: 8px;
+}
+
+.tech-progress-track {
+  width: 100%;
+  height: 6px;
+  background: #2c2c34;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.tech-progress-fill {
+  width: 0%;
+  height: 100%;
+  background: #e63929;
+  transition: width 0.1s linear;
+}
+
+@media screen and (max-width: 767px) {
+  .tech-intro-panes {
+    grid-template-columns: 1fr;
+  }
+  .tech-code-pane {
+    border-right: none;
+    border-bottom: 1px solid #2c2c34;
+  }
+  .tech-code-stream {
+    min-height: 160px;
+    font-size: 0.72rem;
+  }
+  .tech-log-stream {
+    max-height: 140px;
+    font-size: 0.7rem;
+  }
+}
+
+/* ============================================================
+   SCROLL-TRIGGERED OPTICAL ILLUSION TRANSITIONS
+   ============================================================ */
+.scroll-illusion-item {
+  opacity: 0;
+  transform: perspective(1000px) rotateX(9deg) translateY(34px) scale(0.96);
+  clip-path: polygon(0 0, 100% 0, 100% 18%, 0 38%);
+  transition:
+    opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    clip-path 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform, opacity, clip-path;
+}
+
+.scroll-illusion-item.is-visible {
+  opacity: 1;
+  transform: perspective(1000px) rotateX(0deg) translateY(0) scale(1);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+}
+
+/* Top Scroll Kinetic Illusion Bar */
+.scroll-illusion-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 0%;
+  background: linear-gradient(90deg, #111111 0%, #e63929 100%);
+  z-index: 9999;
+  pointer-events: none;
+}

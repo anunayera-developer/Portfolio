@@ -1,12 +1,20 @@
 /**
  * Anunay Brini — Personal Portfolio
- * Optical-Illusion Page Transitions, Dynamic Portfolio Loader, Mobile Menu & Contact Form
+ * 10-Second Technical Coding Intro, Optical-Illusion Page & Scroll Transitions, Dynamic Portfolio Loader
  */
 
 document.addEventListener('DOMContentLoaded', () => {
   // ============================================================
-  // 1. OPTICAL ILLUSION PAGE TRANSITIONS
+  // 1. 10-SECOND CODING-BASED TECHNICAL INTRO (RED, BLACK & WHITE)
   // ============================================================
+  const techIntro = document.getElementById('tech-code-intro');
+  const codeStreamEl = document.getElementById('tech-code-stream');
+  const logStreamEl = document.getElementById('tech-log-stream');
+  const timerReadoutEl = document.getElementById('tech-timer-readout');
+  const progressFillEl = document.getElementById('tech-progress-fill');
+  const percentLabelEl = document.getElementById('tech-percent-label');
+  const stageLabelEl = document.getElementById('tech-stage-label');
+  const skipBtn = document.getElementById('tech-intro-skip');
   const illusionOverlay = document.getElementById('page-illusion-overlay');
 
   function revealPage() {
@@ -19,9 +27,120 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  revealPage();
+  function runTechIntro() {
+    const DURATION_MS = 10000;
+    const seen = sessionStorage.getItem('portfolio_tech_intro_seen') === 'true';
 
-  // Ensure browser Back/Forward navigation never leaves the overlay closed
+    if (!techIntro || seen) {
+      if (techIntro) techIntro.classList.add('is-done');
+      revealPage();
+      return;
+    }
+
+    // Keep illusion overlay hidden behind intro until intro finishes
+    if (illusionOverlay) {
+      illusionOverlay.classList.remove('is-entering');
+      illusionOverlay.classList.add('is-revealed');
+    }
+
+    const codeLines = [
+      '<span class="cmt">// anunay-brini/portfolio-runtime.ts</span>',
+      '<span class="kw">import</span> { OpticalIllusion, StackEngine } <span class="kw">from</span> <span class="str">"@devlab/core"</span>;',
+      '',
+      '<span class="kw">export class</span> PortfolioRuntime {',
+      '  <span class="kw">readonly</span> author = <span class="str">"Anunay Brini"</span>;',
+      '  <span class="kw">readonly</span> location = <span class="str">"Kochi, India"</span>;',
+      '  <span class="kw">readonly</span> degree = <span class="str">"B.Sc. (Hons.) CS [2024-2028]"</span>;',
+      '  <span class="kw">readonly</span> experience = [<span class="str">"ERA"</span>, <span class="str">"Developer Lab"</span>];',
+      '  <span class="kw">readonly</span> palette = { bg: <span class="str">"#FFFFFF"</span>, ink: <span class="str">"#111111"</span>, accent: <span class="str">"#E63929"</span> };',
+      '',
+      '  <span class="kw">async</span> boot(): Promise&lt;void&gt; {',
+      '    <span class="kw">await</span> StackEngine.mount([<span class="str">"FullStack"</span>, <span class="str">"UI/UX"</span>, <span class="str">"Graphic"</span>, <span class="str">"ML"</span>]);',
+      '    <span class="kw">await</span> OpticalIllusion.attachScrollObserver({ perspective: 1000 });',
+      '    <span class="kw">return</span> <span class="kw">this</span>.renderProductionBundle();',
+      '  }',
+      '}'
+    ];
+
+    const logSteps = [
+      { at: 0.0, stage: 'BOOTING KERNEL & RUNTIME...', text: '[00.0s] $ init --target=anunay-portfolio --mode=production' },
+      { at: 1.2, stage: 'RESOLVING DEPENDENCIES...', text: '[01.2s] > Resolving modules: [react, fastapi, laravel, mysql, rag]' },
+      { at: 2.5, stage: 'COMPILING DESIGN TOKENS...', text: '[02.5s] > Compiling palette: #FFFFFF / #111111 / #E63929 [OK]' },
+      { at: 4.0, stage: 'MOUNTING PROJECT REGISTRY...', text: '[04.0s] > Mounting 7 repositories from data/portfolio.json' },
+      { at: 5.5, stage: 'HYDRATING TIMELINE...', text: '[05.5s] > Loading ERA -> Developer Lab engineering journey' },
+      { at: 7.0, stage: 'ATTACHING SCROLL ILLUSIONS...', text: '[07.0s] > Binding 3D perspective & clip-path scroll observers' },
+      { at: 8.5, stage: 'VERIFYING INTEGRITY...', text: '[08.5s] > SHA256 checksum verified: 9F4A..C10E [PASS]', pass: true },
+      { at: 9.5, stage: 'LAUNCHING PORTFOLIO...', text: '[09.5s] > Build ready. Executing kinetic transition...', pass: true }
+    ];
+
+    let shownLogs = 0;
+    const startTime = performance.now();
+    let finished = false;
+
+    function finishIntro() {
+      if (finished) return;
+      finished = true;
+      sessionStorage.setItem('portfolio_tech_intro_seen', 'true');
+      if (illusionOverlay) {
+        illusionOverlay.classList.remove('is-revealed');
+        illusionOverlay.classList.add('is-entering');
+      }
+      techIntro.classList.add('is-done');
+      setTimeout(() => {
+        revealPage();
+      }, 120);
+    }
+
+    if (skipBtn) {
+      skipBtn.addEventListener('click', finishIntro);
+    }
+
+    function tick(now) {
+      if (finished) return;
+      const elapsed = Math.min(now - startTime, DURATION_MS);
+      const ratio = elapsed / DURATION_MS;
+      const sec = (elapsed / 1000).toFixed(1).padStart(4, '0');
+      const pct = Math.min(100, Math.round(ratio * 100));
+
+      if (timerReadoutEl) timerReadoutEl.textContent = `${sec}s / 10.0s`;
+      if (progressFillEl) progressFillEl.style.width = `${pct}%`;
+      if (percentLabelEl) percentLabelEl.textContent = `${pct}%`;
+
+      // Stream code lines progressively over 9.2s
+      if (codeStreamEl) {
+        const lineCount = Math.min(codeLines.length, Math.floor((elapsed / 9000) * codeLines.length) + 1);
+        codeStreamEl.innerHTML = codeLines.slice(0, lineCount).join('\n');
+      }
+
+      // Append telemetry logs at scheduled timestamps
+      while (shownLogs < logSteps.length && elapsed / 1000 >= logSteps[shownLogs].at) {
+        const step = logSteps[shownLogs];
+        if (stageLabelEl) stageLabelEl.textContent = step.stage;
+        if (logStreamEl) {
+          const entry = document.createElement('div');
+          entry.className = `tech-log-entry${step.pass ? ' is-pass' : ''}`;
+          entry.textContent = step.text;
+          logStreamEl.appendChild(entry);
+          logStreamEl.scrollTop = logStreamEl.scrollHeight;
+        }
+        shownLogs++;
+      }
+
+      if (elapsed >= DURATION_MS) {
+        finishIntro();
+      } else {
+        requestAnimationFrame(tick);
+      }
+    }
+
+    requestAnimationFrame(tick);
+  }
+
+  runTechIntro();
+
+  // ============================================================
+  // 2. OPTICAL ILLUSION PAGE TRANSITIONS (BETWEEN PAGES)
+  // ============================================================
   window.addEventListener('pageshow', (e) => {
     if (e.persisted && illusionOverlay) {
       illusionOverlay.classList.remove('is-entering', 'is-leaving');
@@ -29,7 +148,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Intercept internal page navigations for the kinetic optical illusion
   document.addEventListener('click', (e) => {
     const link = e.target.closest('a');
     if (!link || !illusionOverlay) return;
@@ -65,7 +183,59 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // ============================================================
-  // 2. DYNAMIC PORTFOLIO HYDRATION (from Backend API or Static JSON)
+  // 3. SCROLL-TRIGGERED OPTICAL ILLUSION TRANSITIONS
+  // ============================================================
+  const scrollBar = document.createElement('div');
+  scrollBar.className = 'scroll-illusion-bar';
+  document.body.appendChild(scrollBar);
+
+  window.addEventListener('scroll', () => {
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = docHeight > 0 ? Math.min(100, (window.scrollY / docHeight) * 100) : 0;
+    scrollBar.style.width = `${pct}%`;
+  }, { passive: true });
+
+  let scrollObserver = null;
+
+  function setupScrollIllusions() {
+    const targets = document.querySelectorAll(
+      '.project-item, .award-card, .achievement-card, .service-card, .number-cell, .number-cell-feature, .section-about .container, .section-contact .container'
+    );
+
+    if (!('IntersectionObserver' in window)) {
+      targets.forEach(el => el.classList.add('is-visible'));
+      return;
+    }
+
+    if (scrollObserver) scrollObserver.disconnect();
+
+    scrollObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          scrollObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -24px 0px' });
+
+    targets.forEach((el, idx) => {
+      if (!el.classList.contains('scroll-illusion-item')) {
+        el.classList.add('scroll-illusion-item');
+        el.style.transitionDelay = `${(idx % 3) * 0.06}s`;
+      }
+      const rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight * 0.92) {
+        el.classList.add('is-visible');
+      } else {
+        scrollObserver.observe(el);
+      }
+    });
+  }
+
+  setupScrollIllusions();
+
+  // ============================================================
+  // 4. DYNAMIC PORTFOLIO HYDRATION (from Backend API or Static JSON)
   // ============================================================
   function escapeHtml(str) {
     return String(str || '')
@@ -100,7 +270,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!data) return;
 
-    // 2a. Profile & Hero Hydration
     const p = data.profile || {};
     const heroWrapper = document.querySelector('.hero-text-wrapper');
     if (heroWrapper && p.greeting) {
@@ -119,7 +288,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const aboutImg = document.querySelector('.about-profile-image');
     if (aboutImg && p.heroImage) aboutImg.src = p.heroImage;
 
-    // Disciplines Row (single-line)
     const detailRow = document.querySelector('.header-detail-row') || document.querySelector('.project-detail');
     if (detailRow && Array.isArray(p.disciplines) && p.disciplines.length) {
       detailRow.innerHTML = p.disciplines
@@ -127,7 +295,6 @@ document.addEventListener('DOMContentLoaded', () => {
         .join('<span class="bullet-dot">&bull;</span>');
     }
 
-    // About Section on Home
     const aboutSection = document.getElementById('About');
     if (aboutSection) {
       const h2 = aboutSection.querySelector('h2');
@@ -145,7 +312,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    // Stats Section
     const statsGrid = document.querySelector('.grid-numbers');
     if (statsGrid && Array.isArray(p.stats) && p.stats.length) {
       statsGrid.innerHTML = p.stats.map(s => `
@@ -156,7 +322,6 @@ document.addEventListener('DOMContentLoaded', () => {
       `).join('');
     }
 
-    // 2b. Roles & Journey Hydration
     const journeyGrid = document.querySelector('#Journey .card-grid');
     if (journeyGrid && Array.isArray(data.journey)) {
       journeyGrid.innerHTML = data.journey.map((j, idx) => `
@@ -176,7 +341,6 @@ document.addEventListener('DOMContentLoaded', () => {
       `).join('');
     }
 
-    // 2c. Projects Hydration
     const projectsGrid = document.querySelector('.project-list-custom');
     if (projectsGrid && Array.isArray(data.projects)) {
       projectsGrid.innerHTML = data.projects.map(proj => `
@@ -213,7 +377,6 @@ document.addEventListener('DOMContentLoaded', () => {
       `).join('');
     }
 
-    // 2d. Achievements Hydration
     const achGrid = document.getElementById('achievements-grid');
     if (achGrid && Array.isArray(data.achievements)) {
       achGrid.innerHTML = data.achievements.map(a => `
@@ -225,7 +388,6 @@ document.addEventListener('DOMContentLoaded', () => {
       `).join('');
     }
 
-    // 2e. Technical Interests Hydration
     const intGrid = document.querySelector('#Interests .service-grid');
     if (intGrid && Array.isArray(data.interests)) {
       intGrid.innerHTML = data.interests.map(item => `
@@ -235,12 +397,15 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
       `).join('');
     }
+
+    // Re-bind scroll illusions for newly hydrated cards
+    setupScrollIllusions();
   }
 
   hydratePortfolio();
 
   // ============================================================
-  // 3. MOBILE MENU TOGGLE
+  // 5. MOBILE MENU TOGGLE
   // ============================================================
   const menuToggle = document.getElementById('menu-toggle') || document.querySelector('.menu-button');
   const menuWrap = document.querySelector('.w-nav-menu') || document.querySelector('.menu-wrap');
@@ -271,7 +436,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ============================================================
-  // 4. SMOOTH SCROLL FOR SAME-PAGE ANCHOR LINKS
+  // 6. SMOOTH SCROLL FOR SAME-PAGE ANCHOR LINKS
   // ============================================================
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
@@ -290,7 +455,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // ============================================================
-  // 5. CONTACT FORM SUBMISSION (Backend API + Static Fallback)
+  // 7. CONTACT FORM SUBMISSION
   // ============================================================
   const contactForm = document.getElementById('contact-form');
   const successMsg = document.getElementById('form-success');
