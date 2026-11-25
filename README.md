@@ -1,49 +1,16 @@
-# Moxa Portfolio Website Replicate
+# Anunay Brini — Personal Portfolio
 
-A pixel-perfect, fully standalone replica of the [Moxa Webflow Template](https://moxa-template.webflow.io/).
+Personal portfolio website of **Anunay Brini**, B.Sc. (Hons.) Computer Science student (2024–2028) at Rajagiri College of Social Sciences, Full Stack Developer, UI/UX Designer, and Graphic Designer based in Kochi, Kerala, India.
 
-## 📁 Project Structure
+## Features
+- **Red, Black & White Architectural Design**: High-contrast responsive layout across desktop, tablet, and mobile.
+- **10-Second Technical Coding Intro**: Syntax-highlighted runtime compiler & telemetry sequence on initial load.
+- **Optical Illusion Transitions**: Kinetic blade page transitions and scroll-triggered 3D perspective reveals.
+- **No-Code Studio CMS (`admin.html`)**: Owner-only management dashboard to add, edit, delete, and drag-and-drop reorder projects (with Live Website URL + GitHub URL + drag-and-drop image upload), roles/journey, achievements, profile details, and technical interests.
+- **Flexible Owner Authentication**: Supports Email + Password, Phone Number + OTP, or Two-Factor (Both + Password), with both local Node.js (`server.js`) and GitHub Pages auto-publish support.
 
-```text
-Portfolio/
-├── index.html                   # Homepage
-├── about.html                   # About & Contact page
-├── projects/                    # Case studies & Project details
-│   ├── beautiful-and-advanced-website-interfaces.html
-│   ├── design-and-extreme-programming-practice.html
-│   ├── design-concept-at-work.html
-│   └── nature-inspired-design.html
-├── blog/                        # Blog articles
-│   ├── fostering-professional-growth-in-your-company.html
-│   ├── what-did-i-learn-from-doing-50-design-sprints.html
-│   └── why-i-moved-from-wordpress-to-webflow.html
-├── template/                    # Template utility pages
-│   ├── style-guide.html
-│   ├── licence.html
-│   └── changelog.html
-├── css/
-│   └── moxa-template.debef0be9.css # Core stylesheet with animations & layout
-├── js/
-│   ├── jquery-3.5.1.min.dc5e7f18c8.js
-│   ├── moxa-template.0bc8afd22.js  # Interactions, mobile menu & animations
-│   └── webfont.js
-├── images/                      # All SVGs, logos, icons, PNGs, and graphics
-└── serve.py                     # Local web server script
-```
-
-## 🚀 How to Run Locally
-
-You can open `index.html` directly in any web browser, or launch the included local server:
-
+## Running Locally
 ```bash
-python serve.py
+node server.js
 ```
-
-Then visit:
-**[http://localhost:8000](http://localhost:8000)**
-
-## ✨ Features Included
-- **Complete Visual Replicate**: Typography (Bai Jamjuree), color schemes, layout grid, hero section, marquee banner, award cards, portfolio grid, services list, client logo carousel, blog preview, newsletter signup, and footer.
-- **Full Navigation**: Seamless local interlinking between home, about, portfolio projects, blog posts, and style guide pages.
-- **Standalone Offline Assets**: All 47+ media files (SVGs, brand logos, icons, responsive web images, Webflow JS interaction scripts, stylesheets) stored locally.
-
+Open `http://localhost:3000` for the portfolio and `http://localhost:3000/admin.html` for the Studio CMS.
