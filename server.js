@@ -427,11 +427,31 @@ const server = http.createServer(async (req, res) => {
         focusTitle: body.focusTitle || 'Focus Areas:',
         focusTags: Array.isArray(body.focusTags) ? body.focusTags : [],
         techStack: body.techStack || '',
-        repoUrl: body.repoUrl || ''
+        repoUrl: body.repoUrl || '',
+        liveUrl: body.liveUrl || ''
       };
       data.projects.unshift(newProj);
       savePortfolio(data);
       return sendJson(res, 201, { ok: true, project: newProj });
+    }
+
+    if (pathname === '/api/projects/reorder' && method === 'PUT') {
+      if (!requireAuth(req, res)) return;
+      const body = await readBody(req);
+      const ids = Array.isArray(body.ids) ? body.ids : [];
+      const data = loadPortfolio();
+      const byId = new Map(data.projects.map(p => [p.id, p]));
+      const reordered = [];
+      ids.forEach(id => {
+        if (byId.has(id)) {
+          reordered.push(byId.get(id));
+          byId.delete(id);
+        }
+      });
+      byId.forEach(p => reordered.push(p));
+      data.projects = reordered;
+      savePortfolio(data);
+      return sendJson(res, 200, { ok: true, projects: data.projects });
     }
 
     if (pathname.startsWith('/api/projects/') && method === 'PUT') {

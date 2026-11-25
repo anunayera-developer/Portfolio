@@ -737,6 +737,9 @@ body {
 
 .project-links-row {
   margin-top: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .project-link {
@@ -751,6 +754,14 @@ body {
   background-color: var(--black);
   border-radius: 6px;
   transition: all 0.25s ease;
+}
+
+.project-link-live {
+  background-color: var(--red);
+}
+
+.project-link-live:hover {
+  background-color: var(--red-hover);
 }
 
 .project-link:hover {

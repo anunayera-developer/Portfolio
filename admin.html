@@ -128,14 +128,18 @@
                 <label for="proj-desc">Description</label>
                 <textarea id="proj-desc" rows="3" required placeholder="Describe the project..."></textarea>
               </div>
+              <div class="form-group">
+                <label for="proj-focus-title">Tags Heading</label>
+                <input type="text" id="proj-focus-title" value="Focus Areas:" placeholder="Focus Areas:"/>
+              </div>
               <div class="form-row-2">
                 <div class="form-group">
-                  <label for="proj-focus-title">Tags Heading</label>
-                  <input type="text" id="proj-focus-title" value="Focus Areas:" placeholder="Focus Areas:"/>
+                  <label for="proj-repo">GitHub Repository URL</label>
+                  <input type="url" id="proj-repo" placeholder="https://github.com/..."/>
                 </div>
                 <div class="form-group">
-                  <label for="proj-repo">GitHub / Live URL</label>
-                  <input type="url" id="proj-repo" placeholder="https://github.com/..."/>
+                  <label for="proj-live">Live Website URL</label>
+                  <input type="url" id="proj-live" placeholder="https://your-site.com"/>
                 </div>
               </div>
               <div class="form-group">
@@ -147,14 +151,16 @@
                 <input type="text" id="proj-stack" placeholder="Laravel, PHP, MySQL, React"/>
               </div>
               <div class="form-group">
-                <label for="proj-image">Project Image Path or Upload</label>
-                <div class="input-with-btn">
-                  <input type="text" id="proj-image" placeholder="images/project_gym.jpg"/>
-                  <label class="admin-btn-outline upload-label">
-                    Upload
-                    <input type="file" id="proj-image-file" accept="image/*" hidden/>
-                  </label>
+                <label for="proj-image">Project Image (Drag &amp; Drop, Upload, or Path)</label>
+                <div id="proj-dropzone" class="dropzone" tabindex="0">
+                  <img id="proj-image-preview" class="dropzone-preview" alt="Preview" style="display:none;"/>
+                  <div class="dropzone-text">
+                    <strong>Drag and drop an image here</strong>
+                    <span>or click to browse from your device</span>
+                  </div>
+                  <input type="file" id="proj-image-file" accept="image/*" hidden/>
                 </div>
+                <input type="text" id="proj-image" placeholder="images/project_gym.jpg"/>
               </div>
               <div class="form-actions">
                 <button type="submit" class="admin-btn-red" id="proj-submit-btn">Save Project</button>
@@ -164,6 +170,7 @@
           </div>
           <div class="panel-card">
             <h2>Existing Projects</h2>
+            <p class="panel-sub">Drag and drop any project card to change its display order.</p>
             <div id="projects-list" class="item-list"></div>
           </div>
         </div>

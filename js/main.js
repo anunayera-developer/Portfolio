@@ -195,12 +195,18 @@ document.addEventListener('DOMContentLoaded', () => {
               </div>
               ${proj.techStack ? `<div class="tech-stack-line"><strong>Technology:</strong> ${escapeHtml(proj.techStack)}</div>` : ''}
             </div>
-            ${proj.repoUrl ? `
+            ${(proj.liveUrl || proj.repoUrl) ? `
             <div class="project-links-row">
+              ${proj.liveUrl ? `
+              <a href="${escapeHtml(proj.liveUrl)}" target="_blank" rel="noopener noreferrer" class="project-link project-link-live">
+                <span>Live Website</span>
+                <span class="link-arrow">&#8599;</span>
+              </a>` : ''}
+              ${proj.repoUrl ? `
               <a href="${escapeHtml(proj.repoUrl)}" target="_blank" rel="noopener noreferrer" class="project-link">
                 <span>GitHub Repository</span>
                 <span class="link-arrow">&#8599;</span>
-              </a>
+              </a>` : ''}
             </div>` : ''}
           </div>
         </div>

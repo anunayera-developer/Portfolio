@@ -198,10 +198,12 @@
     });
   });
 
-  // Image Upload Helper
-  async function handleImageUpload(fileInput, targetInput) {
-    const file = fileInput.files && fileInput.files[0];
-    if (!file) return;
+  // Image Upload & Drag-and-Drop Helper
+  async function uploadImageFile(file, targetInput, previewImg) {
+    if (!file || !file.type.startsWith('image/')) {
+      showToast('Please select a valid image file.');
+      return;
+    }
     const reader = new FileReader();
     reader.onload = async () => {
       try {
@@ -210,6 +212,10 @@
           body: JSON.stringify({ filename: file.name, dataUrl: reader.result })
         });
         targetInput.value = res.url;
+        if (previewImg) {
+          previewImg.src = reader.result;
+          previewImg.style.display = 'block';
+        }
         showToast('Image uploaded successfully.');
       } catch (err) {
         showToast(err.message);
@@ -218,23 +224,74 @@
     reader.readAsDataURL(file);
   }
 
-  document.getElementById('proj-image-file').addEventListener('change', function () {
-    handleImageUpload(this, document.getElementById('proj-image'));
-  });
+  function updatePreview(previewImg, pathVal) {
+    if (!previewImg) return;
+    if (pathVal) {
+      previewImg.src = pathVal;
+      previewImg.style.display = 'block';
+    } else {
+      previewImg.style.display = 'none';
+    }
+  }
+
+  const projDropzone = document.getElementById('proj-dropzone');
+  const projFileInput = document.getElementById('proj-image-file');
+  const projImageInput = document.getElementById('proj-image');
+  const projPreview = document.getElementById('proj-image-preview');
+
+  if (projDropzone && projFileInput && projImageInput) {
+    projDropzone.addEventListener('click', () => projFileInput.click());
+    projDropzone.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        projFileInput.click();
+      }
+    });
+    ['dragenter', 'dragover'].forEach(evt => {
+      projDropzone.addEventListener(evt, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        projDropzone.classList.add('is-dragover');
+      });
+    });
+    ['dragleave', 'drop'].forEach(evt => {
+      projDropzone.addEventListener(evt, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        projDropzone.classList.remove('is-dragover');
+      });
+    });
+    projDropzone.addEventListener('drop', (e) => {
+      const file = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+      if (file) uploadImageFile(file, projImageInput, projPreview);
+    });
+    projFileInput.addEventListener('change', function () {
+      const file = this.files && this.files[0];
+      if (file) uploadImageFile(file, projImageInput, projPreview);
+    });
+    projImageInput.addEventListener('input', () => updatePreview(projPreview, projImageInput.value.trim()));
+  }
+
   document.getElementById('prof-image-file').addEventListener('change', function () {
-    handleImageUpload(this, document.getElementById('prof-hero-image'));
+    const file = this.files && this.files[0];
+    if (file) uploadImageFile(file, document.getElementById('prof-hero-image'));
   });
 
   // ---- PROJECTS ----
+  let draggedProjectId = null;
+
   function renderProjects() {
     const container = document.getElementById('projects-list');
     container.innerHTML = '';
     (portfolioData.projects || []).forEach(p => {
       const row = document.createElement('div');
       row.className = 'item-row';
+      row.setAttribute('draggable', 'true');
+      row.dataset.projId = p.id;
+      const linksMeta = [p.liveUrl ? 'Live URL' : '', p.repoUrl ? 'GitHub' : ''].filter(Boolean).join(' + ');
       row.innerHTML = `
         <div class="item-row-info">
-          <div class="item-row-meta">${escapeHtml(p.category)}</div>
+          <div class="item-row-meta"><span class="drag-handle">DRAG</span>${escapeHtml(p.category)}${linksMeta ? ' | ' + escapeHtml(linksMeta) : ''}</div>
           <h4>${escapeHtml(p.title)}</h4>
           <p class="item-row-desc">${escapeHtml(p.description)}</p>
         </div>
@@ -243,6 +300,51 @@
           <button type="button" class="btn-sm btn-sm-danger" data-del-proj="${p.id}">Delete</button>
         </div>
       `;
+
+      row.addEventListener('dragstart', (e) => {
+        draggedProjectId = p.id;
+        row.classList.add('is-dragging');
+        if (e.dataTransfer) e.dataTransfer.effectAllowed = 'move';
+      });
+
+      row.addEventListener('dragend', () => {
+        row.classList.remove('is-dragging');
+        container.querySelectorAll('.item-row').forEach(el => el.classList.remove('is-drag-over'));
+      });
+
+      row.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        if (draggedProjectId && draggedProjectId !== p.id) {
+          row.classList.add('is-drag-over');
+        }
+      });
+
+      row.addEventListener('dragleave', () => {
+        row.classList.remove('is-drag-over');
+      });
+
+      row.addEventListener('drop', async (e) => {
+        e.preventDefault();
+        row.classList.remove('is-drag-over');
+        if (!draggedProjectId || draggedProjectId === p.id) return;
+        const list = portfolioData.projects || [];
+        const fromIdx = list.findIndex(x => x.id === draggedProjectId);
+        const toIdx = list.findIndex(x => x.id === p.id);
+        if (fromIdx === -1 || toIdx === -1) return;
+        const [moved] = list.splice(fromIdx, 1);
+        list.splice(toIdx, 0, moved);
+        renderProjects();
+        try {
+          await api('/api/projects/reorder', {
+            method: 'PUT',
+            body: JSON.stringify({ ids: list.map(x => x.id) })
+          });
+          showToast('Project order saved.');
+        } catch (err) {
+          showToast(err.message);
+        }
+      });
+
       container.appendChild(row);
     });
 
@@ -259,7 +361,9 @@
         document.getElementById('proj-tags').value = (p.focusTags || []).join(', ');
         document.getElementById('proj-stack').value = p.techStack || '';
         document.getElementById('proj-repo').value = p.repoUrl || '';
+        document.getElementById('proj-live').value = p.liveUrl || '';
         document.getElementById('proj-image').value = p.image || '';
+        updatePreview(projPreview, p.image || '');
         document.getElementById('proj-cancel-btn').style.display = 'inline-flex';
       });
     });
@@ -279,6 +383,7 @@
     document.getElementById('proj-id').value = '';
     document.getElementById('project-form-title').textContent = 'Add New Project';
     document.getElementById('proj-cancel-btn').style.display = 'none';
+    updatePreview(projPreview, '');
   }
 
   document.getElementById('proj-cancel-btn').addEventListener('click', resetProjectForm);
@@ -294,6 +399,7 @@
       focusTags: document.getElementById('proj-tags').value.split(',').map(s => s.trim()).filter(Boolean),
       techStack: document.getElementById('proj-stack').value.trim(),
       repoUrl: document.getElementById('proj-repo').value.trim(),
+      liveUrl: document.getElementById('proj-live').value.trim(),
       image: document.getElementById('proj-image').value.trim() || 'images/project_gym.jpg'
     };
     if (id) {

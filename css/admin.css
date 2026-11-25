@@ -242,6 +242,82 @@
   white-space: nowrap;
 }
 
+/* Drag & Drop Image Zone */
+.dropzone {
+  border: 2px dashed #d0d0d8;
+  border-radius: 10px;
+  padding: 18px 14px;
+  background: #fafafa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+  text-align: center;
+  margin-bottom: 6px;
+}
+
+.dropzone:hover,
+.dropzone.is-dragover {
+  border-color: #e63929;
+  background: #fff5f4;
+}
+
+.dropzone-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 0.84rem;
+  color: #555555;
+}
+
+.dropzone-text strong {
+  color: #111111;
+  font-size: 0.88rem;
+}
+
+.dropzone-preview {
+  width: 64px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid #d5d5dc;
+  flex-shrink: 0;
+}
+
+/* Draggable Project Cards */
+.item-row[draggable="true"] {
+  cursor: grab;
+}
+
+.item-row[draggable="true"]:active {
+  cursor: grabbing;
+}
+
+.item-row.is-dragging {
+  opacity: 0.45;
+  border-color: #e63929;
+}
+
+.item-row.is-drag-over {
+  border-top: 3px solid #e63929;
+  transform: translateY(2px);
+}
+
+.drag-handle {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #777777;
+  background: #ececf0;
+  padding: 2px 7px;
+  border-radius: 4px;
+  margin-right: 6px;
+}
+
 .form-actions {
   display: flex;
   gap: 10px;
