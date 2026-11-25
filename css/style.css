@@ -82,7 +82,7 @@ body {
 
 /* ---- Navigation (Flush Top -> Floating Frosted Glass Shrink on Scroll) ---- */
 body {
-  padding-top: 68px;
+  padding-top: 92px;
 }
 
 .navigation {
@@ -188,8 +188,8 @@ body {
 /* ---- COMPACT SECTION SPACING (~1cm / 35-38px) ---- */
 .section-hero {
   position: relative;
-  padding-top: 24px !important;
-  padding-bottom: 30px !important;
+  padding-top: 38px !important;
+  padding-bottom: 34px !important;
   background-color: var(--bg-page) !important;
   overflow: visible;
   transition: background-color 0.3s ease;
