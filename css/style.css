@@ -1149,36 +1149,69 @@ body {
 }
 
 /* ---- About Page Specifics ---- */
+.section-header .heading-wrapper {
+  text-align: center;
+  max-width: 840px;
+  margin: 0 auto 14px auto !important;
+}
+
+.section-header .h1-heading {
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  line-height: 1.12;
+  margin: 0 auto 10px auto;
+  color: var(--text-primary);
+}
+
+.header-image-about {
+  width: 100%;
+  max-width: 760px;
+  margin: 22px auto 32px auto !important;
+  display: flex;
+  justify-content: center;
+}
+
 .about-profile-image {
-  max-width: 420px !important;
-  max-height: 380px !important;
-  aspect-ratio: 4 / 5;
-  object-fit: cover;
-  border-radius: 16px;
-  box-shadow: 0 16px 36px rgba(0,0,0,0.1);
+  width: 100% !important;
+  max-width: 100% !important;
+  height: auto !important;
+  max-height: none !important;
+  aspect-ratio: auto !important;
+  object-fit: contain !important;
+  border-radius: 18px;
+  box-shadow: 0 20px 50px rgba(17, 17, 17, 0.14);
   border: 1px solid var(--border-light);
-  margin: 18px auto !important;
+  margin: 0 auto !important;
   display: block;
 }
 
 .about-profile-image:hover,
 .header-image-about:hover .about-profile-image {
   transform: translateY(-3px);
-  box-shadow: 0 20px 45px rgba(0,0,0,0.15), 0 0 0 2px var(--red);
+  box-shadow: 0 24px 55px rgba(17, 17, 17, 0.18), 0 0 0 2px var(--red);
 }
 
 .about-intro-grid {
   display: grid;
-  grid-template-columns: 1.4fr 1fr;
-  gap: 28px !important;
-  margin: 20px 0 !important;
+  grid-template-columns: 1.45fr 1fr;
+  gap: 32px !important;
+  align-items: start;
+  margin: 28px 0 !important;
 }
 
 .intro-headline {
-  font-size: 1.4rem;
+  font-size: 1.45rem;
   font-weight: 700;
-  margin-bottom: 12px;
+  margin: 0 0 14px 0;
   color: var(--text-primary);
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--red);
+  display: inline-block;
+}
+
+.intro-column .paragraph-large {
+  line-height: 1.72;
+  color: var(--text-secondary);
+  margin-bottom: 14px;
 }
 
 .profile-spec-card {
@@ -1535,8 +1568,10 @@ body {
   }
 
   .about-profile-image {
-    max-width: 270px !important;
-    max-height: 320px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    max-height: none !important;
     margin: 14px auto !important;
   }
 
