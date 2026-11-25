@@ -1,7 +1,14 @@
 (function () {
   const TOKEN_KEY = 'portfolio_owner_token';
+  const STATIC_AUTH_KEY = 'portfolio_static_auth';
+  const STATIC_DATA_KEY = 'portfolio_static_data';
+  const GH_CONFIG_KEY = 'portfolio_github_sync';
+  const API_BASE = window.location.protocol === 'file:' ? 'http://localhost:3000' : '';
+
+  let backendMode = 'server'; // 'server' | 'github-pages'
   let portfolioData = null;
   let authConfig = { authMode: 'email_password' };
+  let activeStaticOtp = null;
 
   const loginView = document.getElementById('login-view');
   const dashboardView = document.getElementById('dashboard-view');
@@ -39,16 +46,115 @@
     toastBar.style.display = 'block';
     setTimeout(() => {
       toastBar.style.display = 'none';
-    }, 3000);
+    }, 3200);
   }
 
   function getToken() {
     return localStorage.getItem(TOKEN_KEY) || '';
   }
 
-  const API_BASE = window.location.protocol === 'file:' ? 'http://localhost:3000' : '';
+  function escapeHtml(str) {
+    return String(str || '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  async function sha256Hex(text) {
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
+    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+  }
+
+  async function getStaticAuth() {
+    const raw = localStorage.getItem(STATIC_AUTH_KEY);
+    if (raw) {
+      try {
+        return JSON.parse(raw);
+      } catch {}
+    }
+    const defaultHash = await sha256Hex('Anunay@2026');
+    const initial = {
+      email: 'anunay@portfolio.local',
+      phone: '+919999999999',
+      passwordHash: defaultHash,
+      authMode: 'email_password',
+      smsWebhookUrl: ''
+    };
+    localStorage.setItem(STATIC_AUTH_KEY, JSON.stringify(initial));
+    return initial;
+  }
+
+  function getGitHubSyncConfig() {
+    try {
+      return JSON.parse(localStorage.getItem(GH_CONFIG_KEY) || '{}');
+    } catch {
+      return {};
+    }
+  }
+
+  function saveGitHubSyncConfig(cfg) {
+    localStorage.setItem(GH_CONFIG_KEY, JSON.stringify(cfg));
+  }
+
+  async function githubCommitFile(filePath, contentBase64, commitMessage) {
+    const cfg = getGitHubSyncConfig();
+    if (!cfg.token) return false;
+    const repo = cfg.repo || 'anunayera-developer/Portfolio';
+    const branch = cfg.branch || 'main';
+    const apiUrl = `https://api.github.com/repos/${repo}/contents/${filePath}`;
+
+    let sha = undefined;
+    const getRes = await fetch(`${apiUrl}?ref=${encodeURIComponent(branch)}`, {
+      headers: {
+        Authorization: `Bearer ${cfg.token}`,
+        Accept: 'application/vnd.github+json'
+      }
+    });
+    if (getRes.ok) {
+      const existing = await getRes.json();
+      sha = existing.sha;
+    }
+
+    const putRes = await fetch(apiUrl, {
+      method: 'PUT',
+      headers: {
+        Authorization: `Bearer ${cfg.token}`,
+        Accept: 'application/vnd.github+json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        message: commitMessage,
+        content: contentBase64,
+        branch,
+        ...(sha ? { sha } : {})
+      })
+    });
+    if (!putRes.ok) {
+      const err = await putRes.json().catch(() => ({}));
+      throw new Error(err.message || `GitHub sync failed (${putRes.status})`);
+    }
+    return true;
+  }
+
+  async function persistStaticPortfolio(commitMessage) {
+    localStorage.setItem(STATIC_DATA_KEY, JSON.stringify(portfolioData));
+    const cfg = getGitHubSyncConfig();
+    if (cfg.token) {
+      const jsonStr = JSON.stringify(portfolioData, null, 2);
+      const b64 = btoa(unescape(encodeURIComponent(jsonStr)));
+      await githubCommitFile('data/portfolio.json', b64, commitMessage || 'Update portfolio data from Studio CMS');
+      showToast('Saved and published to GitHub!');
+    } else {
+      showToast('Saved locally. Add GitHub Token in Login & Security to auto-publish to GitHub Pages.');
+    }
+  }
 
   async function api(url, options = {}) {
+    if (backendMode === 'github-pages') {
+      return handleStaticApi(url, options);
+    }
+
     const headers = { 'Content-Type': 'application/json', ...(options.headers || {}) };
     const token = getToken();
     if (token) headers['Authorization'] = `Bearer ${token}`;
@@ -56,11 +162,251 @@
     try {
       res = await fetch(`${API_BASE}${url}`, { ...options, headers });
     } catch {
-      throw new Error('Backend server is not running. Double-click start-portfolio.bat or run "node server.js" in E:\\Portfolio.');
+      throw new Error('Backend server is unreachable.');
     }
     const data = await res.json().catch(() => ({}));
     if (!res.ok) throw new Error(data.error || `Request failed (${res.status})`);
     return data;
+  }
+
+  async function handleStaticApi(url, options = {}) {
+    const method = (options.method || 'GET').toUpperCase();
+    const body = options.body ? JSON.parse(options.body) : {};
+
+    if (url === '/api/auth/config' && method === 'GET') {
+      const a = await getStaticAuth();
+      return {
+        authMode: a.authMode,
+        emailHint: a.email,
+        phoneHint: a.phone
+      };
+    }
+
+    if (url === '/api/auth/send-otp' && method === 'POST') {
+      const a = await getStaticAuth();
+      const norm = s => String(s || '').replace(/[\s\-()]/g, '').trim();
+      if (!norm(body.phone) || norm(body.phone) !== norm(a.phone)) {
+        throw new Error('Phone number does not match the owner account.');
+      }
+      const code = String(Math.floor(100000 + Math.random() * 900000));
+      activeStaticOtp = { code, exp: Date.now() + 5 * 60 * 1000 };
+      if (a.smsWebhookUrl) {
+        try {
+          await fetch(a.smsWebhookUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ phone: a.phone, otp: code })
+          });
+        } catch {}
+      }
+      return { ok: true, localPreviewOtp: code };
+    }
+
+    if (url === '/api/auth/login' && method === 'POST') {
+      const a = await getStaticAuth();
+      const mode = a.authMode || 'email_password';
+      const emailOk = String(body.email || '').trim().toLowerCase() === a.email.trim().toLowerCase();
+      const norm = s => String(s || '').replace(/[\s\-()]/g, '').trim();
+      const phoneOk = norm(body.phone) === norm(a.phone);
+      const passHash = await sha256Hex(body.password || '');
+      const passOk = passHash === a.passwordHash;
+      const otpOk = activeStaticOtp && Date.now() <= activeStaticOtp.exp && String(body.otp || '').trim() === activeStaticOtp.code;
+
+      let ok = false;
+      if (mode === 'email_password') ok = emailOk && passOk;
+      else if (mode === 'phone_otp') ok = phoneOk && otpOk;
+      else ok = (emailOk || phoneOk) && passOk && otpOk;
+
+      if (!ok) throw new Error('Invalid owner credentials or expired OTP.');
+      activeStaticOtp = null;
+      return { ok: true, token: 'static-owner-session' };
+    }
+
+    if (url === '/api/auth/me' && method === 'GET') {
+      if (getToken() !== 'static-owner-session') throw new Error('Unauthorized');
+      const a = await getStaticAuth();
+      return {
+        ok: true,
+        email: a.email,
+        phone: a.phone,
+        authMode: a.authMode,
+        smsWebhookUrl: a.smsWebhookUrl || ''
+      };
+    }
+
+    if (url === '/api/auth/settings' && method === 'POST') {
+      const a = await getStaticAuth();
+      if (body.email) a.email = String(body.email).trim();
+      if (body.phone !== undefined) a.phone = String(body.phone).trim();
+      if (['email_password', 'phone_otp', 'both'].includes(body.authMode)) a.authMode = body.authMode;
+      if (body.smsWebhookUrl !== undefined) a.smsWebhookUrl = String(body.smsWebhookUrl).trim();
+      if (body.newPassword && body.newPassword.length >= 6) {
+        a.passwordHash = await sha256Hex(body.newPassword);
+      }
+      localStorage.setItem(STATIC_AUTH_KEY, JSON.stringify(a));
+      return { ok: true, ...a };
+    }
+
+    if (url === '/api/portfolio' && method === 'GET') {
+      const cached = localStorage.getItem(STATIC_DATA_KEY);
+      if (cached) {
+        try {
+          return JSON.parse(cached);
+        } catch {}
+      }
+      const res = await fetch('data/portfolio.json', { cache: 'no-store' });
+      if (!res.ok) throw new Error('Could not load data/portfolio.json');
+      const json = await res.json();
+      localStorage.setItem(STATIC_DATA_KEY, JSON.stringify(json));
+      return json;
+    }
+
+    if (url === '/api/upload' && method === 'POST') {
+      const match = String(body.dataUrl || '').match(/^data:image\/(png|jpeg|jpg|webp|gif);base64,(.+)$/i);
+      if (!match) throw new Error('Invalid image format.');
+      const ext = match[1].toLowerCase() === 'jpeg' ? 'jpg' : match[1].toLowerCase();
+      const filePath = `images/uploads/${Date.now()}.${ext}`;
+      const cfg = getGitHubSyncConfig();
+      if (cfg.token) {
+        await githubCommitFile(filePath, match[2], `Upload image ${filePath}`);
+        return { ok: true, url: filePath };
+      }
+      return { ok: true, url: body.dataUrl };
+    }
+
+    if (url === '/api/portfolio/profile' && method === 'PUT') {
+      portfolioData.profile = { ...portfolioData.profile, ...body };
+      await persistStaticPortfolio('Update profile details');
+      return { ok: true };
+    }
+
+    if (url === '/api/projects' && method === 'POST') {
+      const newProj = {
+        id: `proj-${Date.now()}`,
+        category: body.category || 'Web Development',
+        title: body.title || 'Untitled Project',
+        description: body.description || '',
+        image: body.image || 'images/project_gym.jpg',
+        focusTitle: body.focusTitle || 'Focus Areas:',
+        focusTags: Array.isArray(body.focusTags) ? body.focusTags : [],
+        techStack: body.techStack || '',
+        repoUrl: body.repoUrl || '',
+        liveUrl: body.liveUrl || ''
+      };
+      portfolioData.projects.unshift(newProj);
+      await persistStaticPortfolio(`Add project: ${newProj.title}`);
+      return { ok: true, project: newProj };
+    }
+
+    if (url === '/api/projects/reorder' && method === 'PUT') {
+      const ids = Array.isArray(body.ids) ? body.ids : [];
+      const byId = new Map(portfolioData.projects.map(p => [p.id, p]));
+      const reordered = [];
+      ids.forEach(id => {
+        if (byId.has(id)) {
+          reordered.push(byId.get(id));
+          byId.delete(id);
+        }
+      });
+      byId.forEach(p => reordered.push(p));
+      portfolioData.projects = reordered;
+      await persistStaticPortfolio('Reorder projects');
+      return { ok: true };
+    }
+
+    if (url.startsWith('/api/projects/') && method === 'PUT') {
+      const id = url.split('/').pop();
+      const idx = portfolioData.projects.findIndex(p => p.id === id);
+      if (idx !== -1) portfolioData.projects[idx] = { ...portfolioData.projects[idx], ...body, id };
+      await persistStaticPortfolio('Update project');
+      return { ok: true };
+    }
+
+    if (url.startsWith('/api/projects/') && method === 'DELETE') {
+      const id = url.split('/').pop();
+      portfolioData.projects = portfolioData.projects.filter(p => p.id !== id);
+      await persistStaticPortfolio('Delete project');
+      return { ok: true };
+    }
+
+    if (url === '/api/journey' && method === 'POST') {
+      const newItem = {
+        id: `role-${Date.now()}`,
+        number: body.number || String(portfolioData.journey.length + 1).padStart(2, '0'),
+        title: body.title || '',
+        description: body.description || '',
+        company: body.company || '',
+        period: body.period || ''
+      };
+      portfolioData.journey.unshift(newItem);
+      await persistStaticPortfolio('Add role/journey item');
+      return { ok: true };
+    }
+
+    if (url.startsWith('/api/journey/') && method === 'PUT') {
+      const id = url.split('/').pop();
+      const idx = portfolioData.journey.findIndex(j => j.id === id);
+      if (idx !== -1) portfolioData.journey[idx] = { ...portfolioData.journey[idx], ...body, id };
+      await persistStaticPortfolio('Update role/journey item');
+      return { ok: true };
+    }
+
+    if (url.startsWith('/api/journey/') && method === 'DELETE') {
+      const id = url.split('/').pop();
+      portfolioData.journey = portfolioData.journey.filter(j => j.id !== id);
+      await persistStaticPortfolio('Delete role/journey item');
+      return { ok: true };
+    }
+
+    if (url === '/api/achievements' && method === 'POST') {
+      if (!Array.isArray(portfolioData.achievements)) portfolioData.achievements = [];
+      portfolioData.achievements.unshift({ id: `ach-${Date.now()}`, ...body });
+      await persistStaticPortfolio('Add achievement');
+      return { ok: true };
+    }
+
+    if (url.startsWith('/api/achievements/') && method === 'PUT') {
+      const id = url.split('/').pop();
+      const idx = (portfolioData.achievements || []).findIndex(a => a.id === id);
+      if (idx !== -1) portfolioData.achievements[idx] = { ...portfolioData.achievements[idx], ...body, id };
+      await persistStaticPortfolio('Update achievement');
+      return { ok: true };
+    }
+
+    if (url.startsWith('/api/achievements/') && method === 'DELETE') {
+      const id = url.split('/').pop();
+      portfolioData.achievements = (portfolioData.achievements || []).filter(a => a.id !== id);
+      await persistStaticPortfolio('Delete achievement');
+      return { ok: true };
+    }
+
+    if (url === '/api/interests' && method === 'POST') {
+      if (!Array.isArray(portfolioData.interests)) portfolioData.interests = [];
+      portfolioData.interests.push({ id: `int-${Date.now()}`, ...body });
+      await persistStaticPortfolio('Add technical interest');
+      return { ok: true };
+    }
+
+    if (url.startsWith('/api/interests/') && method === 'PUT') {
+      const id = url.split('/').pop();
+      const idx = (portfolioData.interests || []).findIndex(i => i.id === id);
+      if (idx !== -1) portfolioData.interests[idx] = { ...portfolioData.interests[idx], ...body, id };
+      await persistStaticPortfolio('Update technical interest');
+      return { ok: true };
+    }
+
+    if (url.startsWith('/api/interests/') && method === 'DELETE') {
+      const id = url.split('/').pop();
+      portfolioData.interests = (portfolioData.interests || []).filter(i => i.id !== id);
+      await persistStaticPortfolio('Delete technical interest');
+      return { ok: true };
+    }
+
+    if (url === '/api/messages' && method === 'GET') {
+      return [];
+    }
+
+    return { ok: true };
   }
 
   function configureLoginFields(mode) {
@@ -92,14 +438,23 @@
   }
 
   async function init() {
+    // Detect if Node backend is available; otherwise switch seamlessly to GitHub Pages Cloud Mode
     try {
-      authConfig = await api('/api/auth/config');
-      configureLoginFields(authConfig.authMode);
+      const probe = await fetch(`${API_BASE}/api/auth/config`, { cache: 'no-store' });
+      const contentType = probe.headers.get('content-type') || '';
+      if (probe.ok && contentType.includes('application/json')) {
+        backendMode = 'server';
+        authConfig = await probe.json();
+      } else {
+        backendMode = 'github-pages';
+        authConfig = await handleStaticApi('/api/auth/config');
+      }
     } catch {
-      loginError.textContent = 'Backend server is not running. Start it with "node server.js" to use the CMS.';
-      loginError.style.display = 'block';
-      return;
+      backendMode = 'github-pages';
+      authConfig = await handleStaticApi('/api/auth/config');
     }
+
+    configureLoginFields(authConfig.authMode);
 
     if (getToken()) {
       try {
@@ -125,7 +480,7 @@
         body: JSON.stringify({ phone })
       });
       if (res.localPreviewOtp) {
-        loginNotice.textContent = `OTP sent. Local preview code: ${res.localPreviewOtp}`;
+        loginNotice.textContent = `OTP sent. Verification code: ${res.localPreviewOtp}`;
       } else {
         loginNotice.textContent = res.message || 'OTP sent to your phone.';
       }
@@ -169,11 +524,17 @@
     dashboardView.style.display = 'block';
     logoutBtn.style.display = 'inline-flex';
 
-    // Fill security settings
     document.getElementById('sec-mode').value = me.authMode || 'email_password';
     document.getElementById('sec-email').value = me.email || '';
     document.getElementById('sec-phone').value = me.phone || '';
     document.getElementById('sec-webhook').value = me.smsWebhookUrl || '';
+
+    const ghCfg = getGitHubSyncConfig();
+    if (document.getElementById('sec-gh-token')) {
+      document.getElementById('sec-gh-token').value = ghCfg.token || '';
+      document.getElementById('sec-gh-repo').value = ghCfg.repo || 'anunayera-developer/Portfolio';
+      document.getElementById('sec-gh-branch').value = ghCfg.branch || 'main';
+    }
 
     await loadAllData();
   }
@@ -216,7 +577,7 @@
           previewImg.src = reader.result;
           previewImg.style.display = 'block';
         }
-        showToast('Image uploaded successfully.');
+        showToast('Image ready.');
       } catch (err) {
         showToast(err.message);
       }
@@ -339,7 +700,7 @@
             method: 'PUT',
             body: JSON.stringify({ ids: list.map(x => x.id) })
           });
-          showToast('Project order saved.');
+          if (backendMode === 'server') showToast('Project order saved.');
         } catch (err) {
           showToast(err.message);
         }
@@ -372,7 +733,7 @@
       btn.addEventListener('click', async () => {
         if (!confirm('Delete this project?')) return;
         await api(`/api/projects/${btn.dataset.delProj}`, { method: 'DELETE' });
-        showToast('Project deleted.');
+        if (backendMode === 'server') showToast('Project deleted.');
         await loadAllData();
       });
     });
@@ -404,10 +765,10 @@
     };
     if (id) {
       await api(`/api/projects/${id}`, { method: 'PUT', body: JSON.stringify(payload) });
-      showToast('Project updated.');
+      if (backendMode === 'server') showToast('Project updated.');
     } else {
       await api('/api/projects', { method: 'POST', body: JSON.stringify(payload) });
-      showToast('Project added.');
+      if (backendMode === 'server') showToast('Project added.');
     }
     resetProjectForm();
     await loadAllData();
@@ -453,7 +814,7 @@
       btn.addEventListener('click', async () => {
         if (!confirm('Delete this role?')) return;
         await api(`/api/journey/${btn.dataset.delJrn}`, { method: 'DELETE' });
-        showToast('Role deleted.');
+        if (backendMode === 'server') showToast('Role deleted.');
         await loadAllData();
       });
     });
@@ -480,10 +841,10 @@
     };
     if (id) {
       await api(`/api/journey/${id}`, { method: 'PUT', body: JSON.stringify(payload) });
-      showToast('Role updated.');
+      if (backendMode === 'server') showToast('Role updated.');
     } else {
       await api('/api/journey', { method: 'POST', body: JSON.stringify(payload) });
-      showToast('Role added.');
+      if (backendMode === 'server') showToast('Role added.');
     }
     resetJourneyForm();
     await loadAllData();
@@ -528,7 +889,7 @@
       btn.addEventListener('click', async () => {
         if (!confirm('Delete this achievement?')) return;
         await api(`/api/achievements/${btn.dataset.delAch}`, { method: 'DELETE' });
-        showToast('Achievement deleted.');
+        if (backendMode === 'server') showToast('Achievement deleted.');
         await loadAllData();
       });
     });
@@ -554,10 +915,10 @@
     };
     if (id) {
       await api(`/api/achievements/${id}`, { method: 'PUT', body: JSON.stringify(payload) });
-      showToast('Achievement updated.');
+      if (backendMode === 'server') showToast('Achievement updated.');
     } else {
       await api('/api/achievements', { method: 'POST', body: JSON.stringify(payload) });
-      showToast('Achievement added.');
+      if (backendMode === 'server') showToast('Achievement added.');
     }
     resetAchForm();
     await loadAllData();
@@ -601,7 +962,7 @@
       graduationYear: document.getElementById('prof-grad').value.trim()
     };
     await api('/api/portfolio/profile', { method: 'PUT', body: JSON.stringify(payload) });
-    showToast('Profile details saved.');
+    if (backendMode === 'server') showToast('Profile details saved.');
     await loadAllData();
   });
 
@@ -641,7 +1002,7 @@
       btn.addEventListener('click', async () => {
         if (!confirm('Delete this technical interest?')) return;
         await api(`/api/interests/${btn.dataset.delInt}`, { method: 'DELETE' });
-        showToast('Interest deleted.');
+        if (backendMode === 'server') showToast('Interest deleted.');
         await loadAllData();
       });
     });
@@ -665,10 +1026,10 @@
     };
     if (id) {
       await api(`/api/interests/${id}`, { method: 'PUT', body: JSON.stringify(payload) });
-      showToast('Interest updated.');
+      if (backendMode === 'server') showToast('Interest updated.');
     } else {
       await api('/api/interests', { method: 'POST', body: JSON.stringify(payload) });
-      showToast('Interest added.');
+      if (backendMode === 'server') showToast('Interest added.');
     }
     resetIntForm();
     await loadAllData();
@@ -723,6 +1084,14 @@
     const newPass = document.getElementById('sec-password').value;
     if (newPass) payload.newPassword = newPass;
 
+    if (document.getElementById('sec-gh-token')) {
+      saveGitHubSyncConfig({
+        token: document.getElementById('sec-gh-token').value.trim(),
+        repo: document.getElementById('sec-gh-repo').value.trim() || 'anunayera-developer/Portfolio',
+        branch: document.getElementById('sec-gh-branch').value.trim() || 'main'
+      });
+    }
+
     try {
       await api('/api/auth/settings', { method: 'POST', body: JSON.stringify(payload) });
       document.getElementById('sec-password').value = '';
@@ -743,14 +1112,6 @@
     a.click();
     URL.revokeObjectURL(url);
   });
-
-  function escapeHtml(str) {
-    return String(str || '')
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;');
-  }
 
   init();
 })();
