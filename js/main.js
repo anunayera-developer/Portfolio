@@ -76,9 +76,10 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   async function hydratePortfolio() {
+    const apiBase = window.location.protocol === 'file:' ? 'http://localhost:3000' : '';
     let data = null;
     try {
-      const apiRes = await fetch('/api/portfolio', { cache: 'no-store' });
+      const apiRes = await fetch(`${apiBase}/api/portfolio`, { cache: 'no-store' });
       if (apiRes.ok) {
         data = await apiRes.json();
       }
@@ -304,8 +305,9 @@ document.addEventListener('DOMContentLoaded', () => {
         message: (document.getElementById('Message-Form') || {}).value || ''
       };
 
+      const contactApiBase = window.location.protocol === 'file:' ? 'http://localhost:3000' : '';
       try {
-        await fetch('/api/contact', {
+        await fetch(`${contactApiBase}/api/contact`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)

@@ -46,11 +46,18 @@
     return localStorage.getItem(TOKEN_KEY) || '';
   }
 
+  const API_BASE = window.location.protocol === 'file:' ? 'http://localhost:3000' : '';
+
   async function api(url, options = {}) {
     const headers = { 'Content-Type': 'application/json', ...(options.headers || {}) };
     const token = getToken();
     if (token) headers['Authorization'] = `Bearer ${token}`;
-    const res = await fetch(url, { ...options, headers });
+    let res;
+    try {
+      res = await fetch(`${API_BASE}${url}`, { ...options, headers });
+    } catch {
+      throw new Error('Backend server is not running. Double-click start-portfolio.bat or run "node server.js" in E:\\Portfolio.');
+    }
     const data = await res.json().catch(() => ({}));
     if (!res.ok) throw new Error(data.error || `Request failed (${res.status})`);
     return data;
