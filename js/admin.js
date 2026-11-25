@@ -70,13 +70,19 @@
     const raw = localStorage.getItem(STATIC_AUTH_KEY);
     if (raw) {
       try {
-        return JSON.parse(raw);
+        const parsed = JSON.parse(raw);
+        if (parsed.email === 'anunay@portfolio.local') {
+          parsed.email = 'anunaybrini@gmail.com';
+          parsed.phone = '+918714422410';
+          localStorage.setItem(STATIC_AUTH_KEY, JSON.stringify(parsed));
+        }
+        return parsed;
       } catch {}
     }
     const defaultHash = await sha256Hex('Anunay@2026');
     const initial = {
-      email: 'anunay@portfolio.local',
-      phone: '+919999999999',
+      email: 'anunaybrini@gmail.com',
+      phone: '+918714422410',
       passwordHash: defaultHash,
       authMode: 'email_password',
       smsWebhookUrl: ''
