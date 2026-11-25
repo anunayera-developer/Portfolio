@@ -289,10 +289,20 @@ document.addEventListener('DOMContentLoaded', () => {
   scrollBar.className = 'scroll-illusion-bar';
   document.body.appendChild(scrollBar);
 
+  const navBar = document.querySelector('.navigation');
+
   window.addEventListener('scroll', () => {
     const docHeight = document.documentElement.scrollHeight - window.innerHeight;
     const pct = docHeight > 0 ? Math.min(100, (window.scrollY / docHeight) * 100) : 0;
     scrollBar.style.width = `${pct}%`;
+
+    if (navBar) {
+      if (window.scrollY > 30) {
+        navBar.classList.add('is-scrolled');
+      } else {
+        navBar.classList.remove('is-scrolled');
+      }
+    }
   }, { passive: true });
 
   let scrollObserver = null;
