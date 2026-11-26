@@ -41,7 +41,9 @@ body {
   padding: 0;
 }
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
@@ -82,6 +84,7 @@ body {
 
 /* ---- Navigation (Flush Top -> Floating Frosted Glass Shrink on Scroll) ---- */
 body {
+  padding-top: 68px;
   padding-top: 92px;
 }
 
@@ -188,6 +191,8 @@ body {
 /* ---- COMPACT SECTION SPACING (~1cm / 35-38px) ---- */
 .section-hero {
   position: relative;
+  padding-top: 24px !important;
+  padding-bottom: 30px !important;
   padding-top: 38px !important;
   padding-bottom: 34px !important;
   background-color: var(--bg-page) !important;
@@ -238,7 +243,7 @@ body {
 /* ---- HERO SECTION ---- */
 .hero-content,
 .hero-image,
-.section-hero .hero-grid > * {
+.section-hero .hero-grid>* {
   opacity: 1 !important;
   visibility: visible !important;
   transform: none !important;
@@ -411,8 +416,13 @@ body {
 }
 
 @keyframes marquee {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
 }
 
 /* ---- About Section ---- */
@@ -486,7 +496,8 @@ body {
   margin: 16px 0 !important;
 }
 
-.number-cell, .number-cell-feature {
+.number-cell,
+.number-cell-feature {
   background-color: var(--bg-card) !important;
   padding: 22px 18px !important;
   border-radius: 12px;
@@ -1148,26 +1159,20 @@ body {
   filter: brightness(0) invert(1);
 }
 
-/* ---- About Page Specifics ---- */
-.section-header .heading-wrapper {
-  text-align: center;
-  max-width: 840px;
-  margin: 0 auto 14px auto !important;
-}
-
-.section-header .h1-heading {
-  font-size: clamp(2rem, 4vw, 3.2rem);
-  line-height: 1.12;
-  margin: 0 auto 10px auto;
-  color: var(--text-primary);
+/* ---- About Page Specifics (Full Uncropped Photo & Aligned Showcase) ---- */
+.about-showcase-grid {
+  display: grid;
+  grid-template-columns: 0.95fr 1.15fr;
+  gap: 32px;
+  align-items: center;
+  margin: 24px auto 26px auto;
 }
 
 .header-image-about {
   width: 100%;
-  max-width: 760px;
-  margin: 22px auto 32px auto !important;
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 
 .about-profile-image {
@@ -1178,48 +1183,64 @@ body {
   aspect-ratio: auto !important;
   object-fit: contain !important;
   border-radius: 18px;
-  box-shadow: 0 20px 50px rgba(17, 17, 17, 0.14);
+  box-shadow: 0 18px 42px rgba(17, 17, 17, 0.12);
   border: 1px solid var(--border-light);
-  margin: 0 auto !important;
+  margin: 0 !important;
   display: block;
 }
 
 .about-profile-image:hover,
 .header-image-about:hover .about-profile-image {
   transform: translateY(-3px);
-  box-shadow: 0 24px 55px rgba(17, 17, 17, 0.18), 0 0 0 2px var(--red);
+  box-shadow: 0 22px 48px rgba(17, 17, 17, 0.16), 0 0 0 2px var(--red);
+}
+
+.spec-grid-2col {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px 18px;
+}
+
+.about-intro-card {
+  background-color: var(--bg-soft);
+  border: 1px solid var(--border-light);
+  border-left: 4px solid var(--red);
+  border-radius: 14px;
+  padding: 26px 30px;
+  margin: 0 0 22px 0;
+}
+
+.about-intro-card .paragraph-large {
+  color: var(--text-secondary);
+  line-height: 1.68;
+  font-size: 0.98rem;
+  margin: 0 0 12px 0;
+}
+
+.about-intro-card .paragraph-large:last-child {
+  margin-bottom: 0;
 }
 
 .about-intro-grid {
   display: grid;
-  grid-template-columns: 1.45fr 1fr;
-  gap: 32px !important;
-  align-items: start;
-  margin: 28px 0 !important;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 28px !important;
+  margin: 20px 0 !important;
 }
 
 .intro-headline {
-  font-size: 1.45rem;
+  font-size: 1.35rem;
   font-weight: 700;
   margin: 0 0 14px 0;
   color: var(--text-primary);
-  padding-bottom: 8px;
-  border-bottom: 2px solid var(--red);
-  display: inline-block;
-}
-
-.intro-column .paragraph-large {
-  line-height: 1.72;
-  color: var(--text-secondary);
-  margin-bottom: 14px;
 }
 
 .profile-spec-card {
   background-color: var(--bg-card);
   border: 1px solid var(--border-light);
-  border-radius: 12px;
-  padding: 18px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.04);
+  border-radius: 14px;
+  padding: 22px 24px;
+  box-shadow: 0 8px 24px rgba(17, 17, 17, 0.05);
 }
 
 .spec-card-title {
@@ -1319,7 +1340,7 @@ body {
     padding: 10px 0 !important;
     font-size: 1.05rem !important;
     text-align: center;
-    border-bottom: 1px solid rgba(0,0,0,0.05);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
   }
 
   .menu-wrap .nav-link:last-child {
@@ -1466,7 +1487,8 @@ body {
     margin: 14px 0 !important;
   }
 
-  .number-cell, .number-cell-feature {
+  .number-cell,
+  .number-cell-feature {
     padding: 14px 6px !important;
     border-radius: 10px !important;
   }
@@ -1558,7 +1580,9 @@ body {
   }
 
   /* Prevent iOS Safari auto-zoom on input focus */
-  input, textarea, select {
+  input,
+  textarea,
+  select {
     font-size: 16px !important;
   }
 
@@ -1567,12 +1591,25 @@ body {
     gap: 12px !important;
   }
 
+  .about-showcase-grid {
+    grid-template-columns: 1fr !important;
+    gap: 18px !important;
+  }
+
+  .spec-grid-2col {
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  .about-intro-card {
+    padding: 18px !important;
+  }
+
   .about-profile-image {
     width: 100% !important;
     max-width: 100% !important;
     height: auto !important;
     max-height: none !important;
-    margin: 14px auto !important;
+    margin: 0 auto !important;
   }
 
   .profile-spec-card {
@@ -1588,7 +1625,7 @@ body {
   }
 }
 
-  /* Extra Small Phones (max-width: 360px) */
+/* Extra Small Phones (max-width: 360px) */
 @media screen and (max-width: 767px) {
   .navigation-right {
     gap: 6px !important;
@@ -1646,6 +1683,7 @@ body {
 
 /* Extra Small Phones (max-width: 360px) */
 @media screen and (max-width: 360px) {
+
   .header-detail-row h5,
   .project-detail h5 {
     font-size: 0.54rem !important;
@@ -1708,14 +1746,37 @@ body {
 }
 
 /* Staggered blade timing for kinetic wave illusion */
-.illusion-blade:nth-child(1) { transition-delay: 0.00s; }
-.illusion-blade:nth-child(2) { transition-delay: 0.03s; }
-.illusion-blade:nth-child(3) { transition-delay: 0.06s; }
-.illusion-blade:nth-child(4) { transition-delay: 0.09s; }
-.illusion-blade:nth-child(5) { transition-delay: 0.09s; }
-.illusion-blade:nth-child(6) { transition-delay: 0.06s; }
-.illusion-blade:nth-child(7) { transition-delay: 0.03s; }
-.illusion-blade:nth-child(8) { transition-delay: 0.00s; }
+.illusion-blade:nth-child(1) {
+  transition-delay: 0.00s;
+}
+
+.illusion-blade:nth-child(2) {
+  transition-delay: 0.03s;
+}
+
+.illusion-blade:nth-child(3) {
+  transition-delay: 0.06s;
+}
+
+.illusion-blade:nth-child(4) {
+  transition-delay: 0.09s;
+}
+
+.illusion-blade:nth-child(5) {
+  transition-delay: 0.09s;
+}
+
+.illusion-blade:nth-child(6) {
+  transition-delay: 0.06s;
+}
+
+.illusion-blade:nth-child(7) {
+  transition-delay: 0.03s;
+}
+
+.illusion-blade:nth-child(8) {
+  transition-delay: 0.00s;
+}
 
 /* Concentric Op-Art Vortex Rings */
 .illusion-vortex {
@@ -1762,22 +1823,34 @@ body {
 }
 
 @keyframes vortexSpinCW {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes vortexSpinCCW {
-  from { transform: rotate(360deg); }
-  to { transform: rotate(0deg); }
+  from {
+    transform: rotate(360deg);
+  }
+
+  to {
+    transform: rotate(0deg);
+  }
 }
 
 /* Entering state (starts covered, then unfolds) */
 .page-illusion-overlay.is-entering {
   pointer-events: all;
 }
+
 .page-illusion-overlay.is-entering .illusion-blade {
   transform: scaleX(1.04) skewY(0deg);
 }
+
 .page-illusion-overlay.is-entering .illusion-vortex {
   opacity: 1;
   transform: scale(1) rotate(0deg);
@@ -1787,6 +1860,7 @@ body {
 .page-illusion-overlay.is-revealed .illusion-blade {
   transform: scaleX(0) skewY(6deg);
 }
+
 .page-illusion-overlay.is-revealed .illusion-vortex {
   opacity: 0;
   transform: scale(1.6) rotate(90deg);
@@ -1796,9 +1870,11 @@ body {
 .page-illusion-overlay.is-leaving {
   pointer-events: all;
 }
+
 .page-illusion-overlay.is-leaving .illusion-blade {
   transform: scaleX(1.04) skewY(0deg);
 }
+
 .page-illusion-overlay.is-leaving .illusion-vortex {
   opacity: 1;
   transform: scale(1) rotate(0deg);
@@ -1916,6 +1992,7 @@ body {
     text-align: center;
     gap: 12px;
   }
+
   .simple-footer-links {
     justify-content: center;
     gap: 14px;
@@ -1993,8 +2070,15 @@ body {
 }
 
 @keyframes introDotPulse {
-  from { transform: scale(0.85); opacity: 0.55; }
-  to { transform: scale(1.25); opacity: 1; }
+  from {
+    transform: scale(0.85);
+    opacity: 0.55;
+  }
+
+  to {
+    transform: scale(1.25);
+    opacity: 1;
+  }
 }
 
 .intro-hud-right {
@@ -2068,21 +2152,35 @@ body {
 }
 
 @keyframes drawCircle {
-  to { stroke-dashoffset: 0; }
+  to {
+    stroke-dashoffset: 0;
+  }
 }
 
 @keyframes drawDiamond {
-  to { stroke-dashoffset: 0; }
+  to {
+    stroke-dashoffset: 0;
+  }
 }
 
 @keyframes spinSlowCW {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes spinSlowCCW {
-  from { transform: rotate(360deg); }
-  to { transform: rotate(0deg); }
+  from {
+    transform: rotate(360deg);
+  }
+
+  to {
+    transform: rotate(0deg);
+  }
 }
 
 .intro-eyebrow {
@@ -2173,13 +2271,16 @@ body {
   .unique-intro {
     padding: 16px 18px;
   }
+
   .intro-svg-reticle {
     width: 140px;
     height: 140px;
   }
+
   .intro-hud-bottom {
     grid-template-columns: 1fr auto;
   }
+
   .intro-stage-status {
     grid-column: 1 / -1;
     min-width: 0;
